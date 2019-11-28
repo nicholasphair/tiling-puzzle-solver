@@ -1,4 +1,4 @@
-package edu.uva.cs6161.objects;
+package edu.uva.cs6161.structures;
 
 
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ public class QuadLinkedList {
         this.matrix = matrix;
         initializeColumns();
         initializeRows();
-
     }
 
     private void initializeColumns() {
@@ -25,7 +24,7 @@ public class QuadLinkedList {
             ColumnObject header = new ColumnObject();
             header.setR(root);
             header.setL(root.getL());
-            root.getL().setL(header);
+            root.getL().setR(header);
             root.setL(header);
         }
     }
@@ -82,5 +81,9 @@ public class QuadLinkedList {
 
     private int numColumns() {
         return matrix[0].length;
+    }
+
+    public ColumnObject getRoot() {
+        return root;
     }
 }

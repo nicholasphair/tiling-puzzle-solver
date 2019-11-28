@@ -1,4 +1,4 @@
-package edu.uva.cs6161.objects;
+package edu.uva.cs6161.structures;
 
 public class DataObject {
     private DataObject L;
