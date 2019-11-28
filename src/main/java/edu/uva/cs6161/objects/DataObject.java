@@ -8,7 +8,10 @@ public class DataObject {
     private DataObject C;
 
     public DataObject() {
-
+        this.L = this;
+        this.R = this;
+        this.U = this;
+        this.D = this;
     }
 
     public DataObject(DataObject L, DataObject R, DataObject U, DataObject D, DataObject C) {
