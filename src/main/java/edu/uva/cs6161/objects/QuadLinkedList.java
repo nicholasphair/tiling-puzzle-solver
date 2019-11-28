@@ -39,17 +39,8 @@ public class QuadLinkedList {
                     columnHead = columnHead.getR();
                     continue;
                 }
-
-                DataObject dataObject = new DataObject();
-                dataObject.setU(columnHead.getU());
-                dataObject.setD(columnHead);
-                dataObject.setC(columnHead);
-
-                columnHead.getU().setD(dataObject);
-                columnHead.setU(dataObject);
-                ((ColumnObject) columnHead).incrementSize();
+                row.add(appendDataObjectToColumn((ColumnObject) columnHead));
                 columnHead = columnHead.getR();
-                row.add(dataObject);
             }
 
             if(row.isEmpty()) {
@@ -64,6 +55,19 @@ public class QuadLinkedList {
                 rowHead.setL(x);
             });
         }
+    }
+
+    private DataObject appendDataObjectToColumn(ColumnObject head) {
+        DataObject dataObject = new DataObject();
+        dataObject.setU(head.getU());
+        dataObject.setD(head);
+        dataObject.setC(head);
+
+        head.getU().setD(dataObject);
+        head.setU(dataObject);
+        head.incrementSize();
+
+        return dataObject;
     }
 
 
