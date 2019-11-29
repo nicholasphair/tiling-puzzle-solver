@@ -37,6 +37,31 @@ public class QuadLinkedListTest {
     }
 
     @Test
+    public void testConstructorWithColumnNames() {
+        String[] names = {"Moe", "Larry", "Curly"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][3], names);
+
+
+        int i = 0;
+        DataObject obj = quadLinkedList.getRoot();
+        final String[] actualNames = new String[3];
+        while((obj = obj.getR()) != quadLinkedList.getRoot()) {
+            actualNames[i++] = ((ColumnObject) obj).getName();
+        }
+
+        assertArrayEquals(names, actualNames);
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorWithWrongNumberOfNames() {
+        String[] names = {"Moe"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][3], names);
+    }
+
+
+
+    @Test
     public void testUpDownLinks() {
         int[][] matrix = {
                 {0, 1, 1, 1},

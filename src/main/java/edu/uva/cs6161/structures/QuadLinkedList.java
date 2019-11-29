@@ -7,13 +7,32 @@ import java.util.List;
 public class QuadLinkedList {
     private ColumnObject root;
     private int[][] matrix;
+    private String[] columnNames;
 
     public QuadLinkedList(int[][] matrix) {
+        this(matrix, null);
+    }
+
+    public QuadLinkedList(int[][] matrix, String[] columnNames) {
         if(!matrixIsValid(matrix)) {
             throw new IllegalArgumentException("matrix cannot be null or empty.");
         }
-
         this.matrix = matrix;
+
+        int numCols = numColumns();
+        if(columnNames == null) {
+            columnNames = new String[numCols];
+        }
+
+        if(!columnNamesAreValid(columnNames, numCols)) {
+            throw new IllegalArgumentException(String.format(
+                    "You supplied %d names for the %d columns of `matrix`.",
+                    columnNames.length,
+                    numCols
+            ));
+        }
+
+        this.columnNames = columnNames;
         initializeColumns();
         initializeRows();
     }
@@ -22,6 +41,7 @@ public class QuadLinkedList {
         root = new ColumnObject();
         for(int i = 0; i < numColumns(); i++) {
             ColumnObject header = new ColumnObject();
+            header.setName(columnNames[i]);
             header.setR(root);
             header.setL(root.getL());
             root.getL().setR(header);
@@ -75,6 +95,10 @@ public class QuadLinkedList {
         return !(matrix == null || matrix.length == 0);
     }
 
+    private static boolean columnNamesAreValid(String[] columnNames, int numColumns) {
+        return columnNames != null && columnNames.length == numColumns;
+    }
+
     private int numRows() {
         return matrix.length;
     }
@@ -85,5 +109,9 @@ public class QuadLinkedList {
 
     public ColumnObject getRoot() {
         return root;
+    }
+
+    public boolean isEmpty() {
+        return root.getR() == root;
     }
 }
