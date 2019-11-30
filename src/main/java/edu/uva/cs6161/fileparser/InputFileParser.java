@@ -9,8 +9,7 @@ public class InputFileParser {
 
     char [][] getInputTilesArray() throws IOException {
 
-        String file_name="input.txt";
-
+        String file_name="input1.txt";
 
         File file = new File(file_name);
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -22,7 +21,6 @@ public class InputFileParser {
         {
            // System.out.println(lineFromInputFile);
             array_length++;
-
             if(array_width < lineFromInputFile.length())
             {
                 array_width=lineFromInputFile.length();
@@ -34,7 +32,6 @@ public class InputFileParser {
        // System.out.println("hereee"+array_width);
 
 //--------------------------------------------------------------------------------dimension read done-------------
-
 
         file = new File(file_name);
         br = new BufferedReader(new FileReader(file));
@@ -61,9 +58,6 @@ public class InputFileParser {
             }
             count++;
         }
-
-
-
         return entireInputArray;
     }
 
@@ -74,12 +68,22 @@ public class InputFileParser {
 
 
         InputFileParser newparser = new InputFileParser();
-        newparser.getInputTiles();
+        ArrayList< char[][]>  allTiles = newparser.getInputTiles();
+
+        for (int counter = 0; counter < allTiles.size(); counter++) {
+            char[][] tile = allTiles.get(counter);
 
 
-    }
+        }
 
-    void getInputTiles() throws IOException {
+
+
+        }
+
+    ArrayList< char[][]>  getInputTiles() throws IOException {
+
+
+        ArrayList< char[][]> all_tiles = new  ArrayList< char[][]>();
 
         InputFileParser new_parser = new InputFileParser();
 
@@ -92,12 +96,14 @@ public class InputFileParser {
             }
         }
 
-        new_parser.PrintInputArray(tilesArray_copy);
-
+        // new_parser.PrintInputArray(tilesArray_copy);
         //System.out.println("hereee"+array_length);
         //System.out.println("hereee"+array_widt
 
         int totalNoOfTiles=0;
+
+
+
         for (int row = 0; row < new_parser.array_length; row ++)
         {
 
@@ -106,17 +112,81 @@ public class InputFileParser {
                {
 
                    System.out.println(".............................................");
-                   new_parser.depthFirstTraversal(tilesArray_copy,row, col);
-                   System.out.println(".............................................");
-                   totalNoOfTiles++;
-               }
 
+                   ArrayList<String> arrayIndices = new   ArrayList<String> ();
+                   new_parser.depthFirstTraversal(tilesArray_copy,row, col, arrayIndices);
+
+                   // now process the indices and add it into an array list of 2d array
+
+
+                   // the the array dimension
+
+                   int row_l=Integer.MAX_VALUE;
+                   int row_h=Integer.MIN_VALUE;
+                   int col_l=Integer.MAX_VALUE;
+                   int col_h=Integer.MIN_VALUE;
+
+                   //System.out.println("For Loop");
+                   for (int counter = 0; counter < arrayIndices.size(); counter++) {
+
+
+                       String[] index = arrayIndices.get(counter).split(",");
+                       int row_ = Integer.parseInt(index[0]);
+                       int col_ = Integer.parseInt(index[1]);
+                       if(row_ < row_l ) row_l=row_;
+
+                       if(row_h < row_ ) row_h=row_;
+
+                       if(col_ < col_l ) col_l=col_;
+
+                       if(col_h < col_ ) col_h=col_;
+                   }
+
+                 //  System.out.println( arrayIndices.toString());
+                 //  System.out.println("For Loop: got low and high value :"+ row_l+","+ row_h+","+ col_l+","+col_h);
+
+
+                   char [][] tile = new char [row_h-row_l+1][col_h-col_l+1];
+
+                   //System.out.println( row_h-row_l+1);
+                   //System.out.println(col_h-col_l+1);
+
+                   for (int row1 = 0; row1 < (row_h-row_l+1); row1 ++) {  // array initialization
+                       for (int col1 = 0; col1 < (col_h-col_l+1) ; col1 ++) {
+
+                           //System.out.print(row1);
+                           //System.out.print(col1);
+
+                           //System.out.print(row1+row_l);
+                          // System.out.print(col1+col_l);
+                           //System.out.println(tilesArray[row1+row_l][col1+col_l]);
+
+                           tile[row1][col1]=tilesArray[row1+row_l][col1+col_l];
+                       }
+                   }
+
+                   all_tiles.add(tile);
+
+                   new_parser.PrintInputArray(tile,row_h-row_l+1,col_h-col_l+1);
+                   //System.out.println(".............................................");
+                    totalNoOfTiles++;
+               }
             }
             //new_parser.PrintInputArray(tilesArray_copy);
         }
-        new_parser.PrintInputArray(tilesArray);
+        //new_parser.PrintInputArray(tilesArray);
         System.out.println("Total Tiles ===="+totalNoOfTiles);
+        return all_tiles;
 
+    }
+    void PrintInputArray(char [][] entireInputArray , int row1, int col1)
+    {
+        for (int row = 0; row < row1; row ++) {  // array initialization
+            for (int col = 0; col < col1; col++) {
+                System.out.print(entireInputArray[row][col]);
+            }
+            System.out.println();
+        }
     }
 
 
@@ -131,7 +201,7 @@ public class InputFileParser {
     }
 
 
-    boolean depthFirstTraversal( char[][] tilesArray, int row, int column)
+    boolean depthFirstTraversal( char[][] tilesArray, int row, int column, ArrayList<String> arrayIndices)
     {
 
         if(row==array_length )
@@ -144,27 +214,28 @@ public class InputFileParser {
             return false;
         }
 
-        System.out.println(row +","+ column);
+        //System.out.println(row +","+ column);
+        arrayIndices.add(row +","+ column);
         tilesArray[row][column]='_';
 
         if( row-1 >= 0 && tilesArray[row-1][column]!='_')
         {
-            depthFirstTraversal(tilesArray, row-1, column);
+            depthFirstTraversal(tilesArray, row-1, column,arrayIndices);
         }
 
         if( column-1 >= 0 && tilesArray[row][column-1]!='_')
         {
-            depthFirstTraversal(tilesArray, row, column-1);
+            depthFirstTraversal(tilesArray, row, column-1,arrayIndices);
         }
 
         if( column+1 < array_width && tilesArray[row][column+1]!='_')
         {
-            depthFirstTraversal(tilesArray, row, column+1);
+            depthFirstTraversal(tilesArray, row, column+1,arrayIndices);
         }
 
         if(row+1 < array_length &&   tilesArray[row+1][column]!='_')
         {
-            depthFirstTraversal(tilesArray, row+1, column);
+            depthFirstTraversal(tilesArray, row+1, column,arrayIndices);
         }
         return true;
     }
