@@ -48,8 +48,6 @@ public class InputFileParser {
 
         while ((lineFromInputFile = br.readLine()) != null)                      // reading from input text file and populating char array
         {
-
-
             for ( int i=0; i < lineFromInputFile.length();i++)
             {
                 if (lineFromInputFile.charAt(i) == ' ')
@@ -62,23 +60,16 @@ public class InputFileParser {
     }
 
 
-
-
     public static void main(String args[]) throws IOException {
 
 
         InputFileParser newparser = new InputFileParser();
         ArrayList< char[][]>  allTiles = newparser.getInputTiles();
 
-        for (int counter = 0; counter < allTiles.size(); counter++) {
-            char[][] tile = allTiles.get(counter);
-
-
-        }
-
-
-
-        }
+       // for (int counter = 0; counter < allTiles.size(); counter++) {
+        //    char[][] tile = allTiles.get(counter);
+       // }
+    }
 
     ArrayList< char[][]>  getInputTiles() throws IOException {
 
@@ -96,13 +87,11 @@ public class InputFileParser {
             }
         }
 
-        // new_parser.PrintInputArray(tilesArray_copy);
+        //new_parser.PrintInputArray(tilesArray_copy);
         //System.out.println("hereee"+array_length);
         //System.out.println("hereee"+array_widt
 
         int totalNoOfTiles=0;
-
-
 
         for (int row = 0; row < new_parser.array_length; row ++)
         {
@@ -158,7 +147,7 @@ public class InputFileParser {
                            //System.out.print(col1);
 
                            //System.out.print(row1+row_l);
-                          // System.out.print(col1+col_l);
+                           //System.out.print(col1+col_l);
                            //System.out.println(tilesArray[row1+row_l][col1+col_l]);
 
                            tile[row1][col1]=tilesArray[row1+row_l][col1+col_l];
@@ -169,13 +158,13 @@ public class InputFileParser {
 
                    new_parser.PrintInputArray(tile,row_h-row_l+1,col_h-col_l+1);
                    //System.out.println(".............................................");
-                    totalNoOfTiles++;
+                   totalNoOfTiles++;
                }
             }
             //new_parser.PrintInputArray(tilesArray_copy);
         }
         //new_parser.PrintInputArray(tilesArray);
-        System.out.println("Total Tiles ===="+totalNoOfTiles);
+        System.out.println("Total Tiles ==== " +totalNoOfTiles);
         return all_tiles;
 
     }
@@ -188,8 +177,6 @@ public class InputFileParser {
             System.out.println();
         }
     }
-
-
     void PrintInputArray(char [][] entireInputArray)
     {
         for (int row = 0; row < array_length; row ++) {  // array initialization
@@ -204,15 +191,10 @@ public class InputFileParser {
     boolean depthFirstTraversal( char[][] tilesArray, int row, int column, ArrayList<String> arrayIndices)
     {
 
-        if(row==array_length )
-        {
-            return false;
-        }
+        if(row==array_length ) return false;
 
-        if(column==array_width )
-        {
-            return false;
-        }
+
+        if(column==array_width ) return false;
 
         //System.out.println(row +","+ column);
         arrayIndices.add(row +","+ column);
