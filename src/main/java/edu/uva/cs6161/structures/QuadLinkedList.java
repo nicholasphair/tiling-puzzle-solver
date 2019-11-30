@@ -89,8 +89,6 @@ public class QuadLinkedList {
         return dataObject;
     }
 
-
-
     private static boolean matrixIsValid(int[][] matrix) {
         return !(matrix == null || matrix.length == 0);
     }
