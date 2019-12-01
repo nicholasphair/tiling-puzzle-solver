@@ -196,12 +196,12 @@ public class EnclosureTest {
         Enclosure original = new Enclosure(piece);
         Enclosure clone = original.clone();
 
-        assertNotEquals(original, clone);
+        assertNotSame(original, clone);
         for(int row = 0; row < original.getLength(); row++) {
             for(int column = 0; column < original.getLength(); column++) {
                 EnclosureCell originalCell = original.getEnclosureCell(row, column);
                 EnclosureCell cloneCell = clone.getEnclosureCell(row, column);
-                assertNotEquals(originalCell, cloneCell);
+                assertNotSame(originalCell, cloneCell);
                 assertEquals(originalCell.value, cloneCell.value);
                 assertEquals(originalCell.inside, cloneCell.inside);
             }
@@ -234,6 +234,69 @@ public class EnclosureTest {
             for(int column = 0; column < enclosure.getLength(); column++) {
                 assertEquals(originalPiece[row][column], enclosure.getEnclosureCell(row, column).value);
             }
+        }
+    }
+
+    @Test
+    public void testEquals() {
+        char[][] piece = {
+                {'O', 'O'},
+                {'O', 'X'},
+        };
+
+        Enclosure enclosureA = new Enclosure(piece);
+        Enclosure enclosureB = new Enclosure(piece);
+
+        assertNotSame(enclosureA, enclosureB);
+        assertEquals(enclosureA, enclosureB);
+    }
+
+    @Test
+    public void testGenerateAllVariants() {
+        char[][] f = {
+                {'_', 'X', 'X'},
+                {'X', 'X', '_'},
+                {'_', 'X', '_'},
+        };
+
+        char[][] l = {
+                {'X', '_'},
+                {'X', '_'},
+                {'X', '_'},
+                {'X', 'X'},
+        };
+
+        char[][] z = {
+                {'X', 'X', '_'},
+                {'_', 'X', '_'},
+                {'_', 'X', 'X'},
+        };
+
+        char[][] x = {
+                {'X', '_', 'X'},
+                {'_', 'X', '_'},
+                {'X', '_', 'X'},
+        };
+
+        char[][] i = {
+                {'X'},
+                {'X'},
+                {'X'},
+                {'X'},
+                {'X'},
+        };
+
+        char[][] w = {
+                {'X', '_', 'X', '_', 'X'},
+                {'_', 'X', '_', 'X', '_'},
+        };
+        f=l;
+
+        Enclosure enclosureF = new Enclosure(f);
+        List<Enclosure> fEnclosures = enclosureF.generateAllVariants();
+        for(Enclosure e : fEnclosures) {
+            e.printEnclosure();
+            System.out.println();
         }
     }
 }

@@ -1,5 +1,7 @@
 package edu.uva.cs6161.structures;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Enclosure {
@@ -144,19 +146,6 @@ public class Enclosure {
         }
     }
 
-
-    /**
-     * Prints the enclosure's cell values.
-     */
-    public void printEnclosure() {
-        for (int row = 0; row < length; row++) {
-            for (int col = 0; col < length; col++) {
-                System.out.print(getEnclosureCell(row, col).value + " ");
-            }
-            System.out.println();
-        }
-    }
-
     /**
      *
      * @return
@@ -169,5 +158,84 @@ public class Enclosure {
             }
         }
         return new Enclosure(cellClone);
+    }
+
+    public List<Enclosure> generateAllVariants() {
+        List<Enclosure> variants = generateAllRotations();
+
+        Enclosure reflection = this.clone();
+        reflection.reflect();
+        List<Enclosure> reflectedVariants = reflection.generateAllRotations();
+        reflectedVariants.stream().filter(x -> !variants.contains(x)).forEach(variants::add);
+
+        return variants;
+    }
+
+    private List<Enclosure> generateAllRotations() {
+        List<Enclosure> variants = new ArrayList<>();
+        Enclosure variant = this.clone();
+
+        variant.rotate();
+
+        while(!variant.equals(this)) {
+            if(!variants.contains(variant)) {
+                //System.out.println("Rotation");
+                //variant.printEnclosure();
+                //System.out.println();
+                variants.add(variant);
+            }
+            variant = variant.clone();
+            variant.rotate();
+        }
+
+        //System.out.println("Rotation");
+        //variant.printEnclosure();
+        //System.out.println();
+        variants.add(this);
+        return variants;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(cells);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+
+        if(obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Enclosure enclosure = (Enclosure) obj;
+        if(this.length != enclosure.getLength()) {
+            return false;
+        }
+
+        for (int row = 0; row < length; row++) {
+            for (int col = 0; col < length; col++) {
+                EnclosureCell enclosureCell = enclosure.getEnclosureCell(row, col);
+                EnclosureCell thisCell = getEnclosureCell(row, col);
+                if(enclosureCell.value != thisCell.value || enclosureCell.inside != thisCell.inside) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Prints the enclosure's cell values.
+     */
+    public void printEnclosure() {
+        for (int row = 0; row < length; row++) {
+            for (int col = 0; col < length; col++) {
+                System.out.print(getEnclosureCell(row, col).value + " ");
+            }
+            System.out.println();
+        }
     }
 }
