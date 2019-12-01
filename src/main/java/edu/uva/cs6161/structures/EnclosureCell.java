@@ -1,7 +1,7 @@
 package edu.uva.cs6161.structures;
 
 public class EnclosureCell {
-    private static final char DEFAULT_VALUE = '1';
+    public static final char DEFAULT_VALUE = '_';
 
     public char value ;
     public boolean inside;

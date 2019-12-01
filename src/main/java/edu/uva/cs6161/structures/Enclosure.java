@@ -33,6 +33,10 @@ public class Enclosure {
     }
 
     public void grow(int size, char value, boolean inside) {
+        if(size < length) {
+            return;
+        }
+
         EnclosureCell[][] newCells = new EnclosureCell[size][size];
         for(int row = 0; row < size; row++) {
             for(int col = 0; col < size; col++) {
@@ -43,6 +47,7 @@ public class Enclosure {
                 }
             }
         }
+        this.length = size;
         this.cells = newCells;
     }
 
