@@ -1,6 +1,7 @@
 package edu.uva.cs6161;
 
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
+import edu.uva.cs6161.handlers.SolutionsHandler;
 import edu.uva.cs6161.handlers.StdoutSolutionsHandler;
 import edu.uva.cs6161.structures.ColumnObject;
 import edu.uva.cs6161.structures.QuadLinkedList;
@@ -40,6 +41,107 @@ public class DLXTest {
 
         assertEquals(expectedSolution, solutions.get(0));
     }
+
+    /**
+     * https://en.wikipedia.org/wiki/Exact_cover#Basic_examples
+     */
+    @Test
+    public void searchWikiBasicExample() {
+        final int[][] wikiExample = {
+         /*      {1, 2, 3, 4}  */
+         /* N */ {0, 0, 0, 0},
+         /* O */ {1, 0, 1, 0},
+         /* P */ {0, 1, 1, 0},
+         /* E */ {0, 1, 0, 1}
+        };
+
+        final String[] wikiNames = { "1", "2", "3", "4"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(wikiExample, wikiNames);
+
+        CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        DLX solver = new DLX(false, collector);
+        solver.search(quadLinkedList);
+
+        List<String> solutions = collector.collect();
+
+        String expectedSolution = new StringBuilder()
+                .append("1 3\n")
+                .append("2 4")
+                .toString();
+
+        assertEquals(expectedSolution, solutions.get(0));
+    }
+
+    /**
+     * https://en.wikipedia.org/wiki/Knuth%27s_Algorithm_X#Example
+     */
+    @Test
+    public void searchWikiDetailedExample() {
+        final int[][] wikiExample = {
+                {1, 0, 0, 1, 0, 0, 1},
+                {1, 0, 0, 1, 0, 0, 0},
+                {0, 0, 0, 1, 1, 0, 1},
+                {0, 0, 1, 0, 1, 1, 0},
+                {0, 1, 1, 0, 0, 1, 1},
+                {0, 1, 0, 0, 0, 0, 1}
+        };
+
+        final String[] wikiNames = { "1", "2", "3", "4", "5", "6", "7"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(wikiExample, wikiNames);
+
+        CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        DLX solver = new DLX(false, collector);
+        solver.search(quadLinkedList);
+
+        List<String> solutions = collector.collect();
+
+        String expectedSolution = new StringBuilder()
+                .append("1 4\n")
+                .append("2 7\n")
+                .append("3 5 6")
+                .toString();
+
+        assertEquals(expectedSolution, solutions.get(0));
+    }
+
+    /**
+     * http://www.ams.org/publicoutreach/feature-column/fcarc-kanoodle
+     */
+    @Test
+    public void searchAMSExample() {
+        final int[][] amsExample = {
+                /*      {1, 2, 3, 4, 5}  */
+                /* A */ {1, 0, 0, 0, 1},
+                /* B */ {0, 1, 0, 1, 0},
+                /* C */ {0, 1, 1, 0, 0},
+                /* D */ {0, 0, 1, 0, 0},
+                /* E */ {1, 0, 0, 1, 1}
+        };
+
+        final String[] amsNames = { "1", "2", "3", "4", "5"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(amsExample, amsNames);
+
+        CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        DLX solver = new DLX(false, collector);
+        solver.search(quadLinkedList);
+
+        List<String> solutions = collector.collect();
+
+        String expectedSolution1 = new StringBuilder()
+                .append("1 5\n")
+                .append("2 4\n")
+                .append("3")
+                .toString();
+
+        String expectedSolution2 = new StringBuilder()
+                .append("1 4 5\n")
+                .append("2 3")
+                .toString();
+
+        assertEquals(expectedSolution1, solutions.get(0));
+        assertEquals(expectedSolution2, solutions.get(1));
+    }
+
 
     @Test
     public void searchNoSolutions() {

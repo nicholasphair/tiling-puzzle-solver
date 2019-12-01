@@ -17,5 +17,6 @@ public class StdoutSolutionsHandler implements SolutionsHandler {
             } while((x = x.getR()) != o);
             System.out.println();
         }
+        System.out.println();
     }
 }
