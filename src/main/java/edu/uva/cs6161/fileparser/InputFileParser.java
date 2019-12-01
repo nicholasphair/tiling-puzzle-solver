@@ -71,7 +71,7 @@ public class InputFileParser {
        // }
     }
 
-    ArrayList< char[][]>  getInputTiles() throws IOException {
+    public ArrayList< char[][]>  getInputTiles() throws IOException {
 
 
         ArrayList< char[][]> all_tiles = new  ArrayList< char[][]>();
