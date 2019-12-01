@@ -1,5 +1,8 @@
 package edu.uva.cs6161.structures;
 
+/**
+ * ColumnObjects as defined by Knuth's paper.
+ */
 public class ColumnObject extends DataObject {
     private int size;
     private String name;

@@ -9,6 +9,9 @@ import edu.uva.cs6161.structures.QuadLinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Algorithm X implemented with Dancing Links. Known as DLX.
+ */
 public class DLX {
 
     private boolean minimizeBranchingFactor;
@@ -23,14 +26,28 @@ public class DLX {
         this.handler = handler;
     }
 
+    /**
+     * Finds all solutions to the exact cover problem.
+     * @param matrix
+     */
     public void search(int[][] matrix) {
         search(new QuadLinkedList(matrix), 0, new ArrayList<>());
     }
 
+    /**
+     * Finds all solutions to the exact cover problem.
+     * @param matrix
+     */
     public void search(QuadLinkedList matrix) {
         search(matrix, 0, new ArrayList<>());
     }
 
+    /**
+     * Finds all solutions to the exact cover problem.
+     * @param matrix
+     * @param k
+     * @param solutions
+     */
     public void search(QuadLinkedList matrix, int k, List<DataObject> solutions) {
         // If R[h] = h, print the current solution (see below) and return.
         if(matrix.isEmpty()) {
@@ -77,6 +94,12 @@ public class DLX {
         uncoverColumn(c);
     }
 
+    /**
+     * Determines the first column to cover. If minimizeBranchingFactor is set, then we choose the column with
+     * the fewest ones.
+     * @param matrix
+     * @return the column to cover.
+     */
     protected ColumnObject chooseC(QuadLinkedList matrix) {
         ColumnObject root = matrix.getRoot();
         ColumnObject c = (ColumnObject) root.getR();
@@ -86,16 +109,18 @@ public class DLX {
             while((j = (ColumnObject) j.getR()) != root) {
                 if(j.getSize() < Integer.MAX_VALUE) {
                     c = j;
-                    c.setSize(j.getSize()); // NOTE (nphair): not necessary?
+                    c.setSize(j.getSize());
                 }
 
             }
         }
-
         return c;
-
     }
 
+    /**
+     * Remove the Column from the header and header's rows from all other columns.
+     * @param header
+     */
     public void coverColumn(DataObject header) {
         header.getR().setL(header.getL());
         header.getL().setR(header.getR());
@@ -111,6 +136,10 @@ public class DLX {
         }
     }
 
+    /**
+     * The inverse operation of coverColumn.
+     * @param header
+     */
     public void uncoverColumn(DataObject header) {
         DataObject obj = header;
         while((obj = obj.getU()) != header) {

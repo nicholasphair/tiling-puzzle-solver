@@ -5,6 +5,9 @@ import edu.uva.cs6161.structures.DataObject;
 
 import java.util.List;
 
+/**
+ * Prints solutions to the exact cover problem to STDOUT.
+ */
 public class StdoutSolutionsHandler implements SolutionsHandler {
 
     @Override

@@ -1,5 +1,8 @@
 package edu.uva.cs6161.structures;
 
+/**
+ * Data Objects as defined by Knuth's paper.
+ */
 public class DataObject {
     private DataObject L;
     private DataObject R;

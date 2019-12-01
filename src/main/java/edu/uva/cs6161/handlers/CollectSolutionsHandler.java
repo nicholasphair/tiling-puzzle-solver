@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Collects solutions (represented as String) to the exact cover problem into a List.
+ */
 public class CollectSolutionsHandler implements SolutionsHandler {
     private List<String> solutions;
 

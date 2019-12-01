@@ -13,6 +13,11 @@ public class QuadLinkedList {
         this(matrix, null);
     }
 
+    /**
+     * Construct the data structure defined in the Dancing Links paper from a 2D int array.
+     * @param matrix
+     * @param columnNames
+     */
     public QuadLinkedList(int[][] matrix, String[] columnNames) {
         if(!matrixIsValid(matrix)) {
             throw new IllegalArgumentException("matrix cannot be null or empty.");
@@ -37,6 +42,11 @@ public class QuadLinkedList {
         initializeRows();
     }
 
+    /**
+     * If no names are provided, traverse the ascii table sequentially to generate names.
+     * @param numNames
+     * @return
+     */
     private String[] generateColumnNames(int numNames) {
         columnNames = new String[numNames];
         int ascii = 'A';
@@ -46,6 +56,9 @@ public class QuadLinkedList {
         return columnNames;
     }
 
+    /**
+     * Walk the columns of the matrix and link ColumnObjects together for each column.
+     */
     private void initializeColumns() {
         root = new ColumnObject();
         for(int i = 0; i < numColumns(); i++) {
@@ -58,6 +71,9 @@ public class QuadLinkedList {
         }
     }
 
+    /**
+     * Walk the matrix creating DataObject for each 1 in the matrix. At the end, link the rows together.
+     */
     private void initializeRows() {
         for(int r = 0; r < numRows(); r++) {
             DataObject columnHead = root.getR();
@@ -85,6 +101,11 @@ public class QuadLinkedList {
         }
     }
 
+    /**
+     * Updates pointer to add a DataObject to the column defined by head.
+     * @param head
+     * @return the newly added DataObject.
+     */
     private DataObject appendDataObjectToColumn(ColumnObject head) {
         DataObject dataObject = new DataObject();
         dataObject.setU(head.getU());
@@ -118,6 +139,10 @@ public class QuadLinkedList {
         return root;
     }
 
+    /**
+     * An empty matrix has a root that points to itself.
+     * @return
+     */
     public boolean isEmpty() {
         return root.getR() == root;
     }
