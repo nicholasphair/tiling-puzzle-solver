@@ -299,4 +299,31 @@ public class EnclosureTest {
             System.out.println();
         }
     }
+
+    @Test
+    public void testTruncate() {
+        char[][] i = {
+                {'_', '_'},
+                {'X', '_'},
+                {'X', '_'},
+                {'X', '_'},
+                {'X', '_'},
+        };
+
+        char[][] expectedTruncatedValue = {
+                {'X'},
+                {'X'},
+                {'X'},
+                {'X'},
+        };
+
+        Enclosure enclosureI = new Enclosure(i);
+        EnclosureCell[][] truncated = enclosureI.truncate();
+
+        for (int row = 0; row < truncated.length; row++) {
+            for (int col = 0; col < truncated[0].length; col++) {
+                assertEquals(expectedTruncatedValue[row][col], truncated[row][col].value);
+            }
+        }
+    }
 }

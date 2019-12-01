@@ -120,8 +120,8 @@ public class Enclosure {
      * Rotates the enclosure 90 degrees counterclockwise.
      */
     public void rotate() {
-        for (int i = 0; i < length/2; i++) {
-            for (int j = i; j < length-i-1; j++) {
+        for(int i = 0; i < length/2; i++) {
+            for(int j = i; j < length-i-1; j++) {
                 EnclosureCell temp = getEnclosureCell(i, j);
                 cells[i][j] = cells[j][length-1-i];
                 cells[j][length-1-i] = cells[length-1-i][length-1-j];
@@ -136,9 +136,9 @@ public class Enclosure {
      * @return
      */
     public void reflect() {
-        for (int column = 0; column < cells.length; ++column) {  // Extra for loop to go through each row in turn, performing the reversal within that row.
+        for(int column = 0; column < cells.length; ++column) {  // Extra for loop to go through each row in turn, performing the reversal within that row.
             EnclosureCell[] tempRow = cells[column];
-            for (int row = 0; row < tempRow.length/2; row++) {
+            for(int row = 0; row < tempRow.length/2; row++) {
                 EnclosureCell temp = tempRow[row];
                 tempRow[row] = cells[column][tempRow.length-row-1];
                 tempRow[tempRow.length-row-1] = temp;
@@ -152,8 +152,8 @@ public class Enclosure {
      */
     public Enclosure clone() {
         char[][] cellClone = new char[length][length];
-        for (int row = 0; row < length; row++) {
-            for (int col = 0; col < length; col++) {
+        for(int row = 0; row < length; row++) {
+            for(int col = 0; col < length; col++) {
                 cellClone[row][col] = getEnclosureCell(row, col).value;
             }
         }
@@ -179,18 +179,12 @@ public class Enclosure {
 
         while(!variant.equals(this)) {
             if(!variants.contains(variant)) {
-                //System.out.println("Rotation");
-                //variant.printEnclosure();
-                //System.out.println();
                 variants.add(variant);
             }
             variant = variant.clone();
             variant.rotate();
         }
 
-        //System.out.println("Rotation");
-        //variant.printEnclosure();
-        //System.out.println();
         variants.add(this);
         return variants;
     }
@@ -215,8 +209,8 @@ public class Enclosure {
             return false;
         }
 
-        for (int row = 0; row < length; row++) {
-            for (int col = 0; col < length; col++) {
+        for(int row = 0; row < length; row++) {
+            for(int col = 0; col < length; col++) {
                 EnclosureCell enclosureCell = enclosure.getEnclosureCell(row, col);
                 EnclosureCell thisCell = getEnclosureCell(row, col);
                 if(enclosureCell.value != thisCell.value || enclosureCell.inside != thisCell.inside) {
@@ -231,11 +225,50 @@ public class Enclosure {
      * Prints the enclosure's cell values.
      */
     public void printEnclosure() {
-        for (int row = 0; row < length; row++) {
-            for (int col = 0; col < length; col++) {
+        for(int row = 0; row < length; row++) {
+            for(int col = 0; col < length; col++) {
                 System.out.print(getEnclosureCell(row, col).value + " ");
             }
             System.out.println();
         }
+    }
+
+    public EnclosureCell[][] truncate() {
+        List<Integer> validRows = new ArrayList<>();
+        for(int row = 0; row < length; row++) {
+            if(!truncatable(cells[row])) {
+                validRows.add(row);
+            }
+        }
+
+        List<Integer> validColumns = new ArrayList<>();
+        for(int column = 0; column < length; column++) {
+            EnclosureCell[] c = new EnclosureCell[length];
+            for(int row = 0; row < length; row++) {
+                c[row] = cells[row][column];
+            }
+
+            if(!truncatable(c)) {
+                validColumns.add(column);
+            }
+        }
+
+        EnclosureCell[][] truncated = new EnclosureCell[validRows.size()][validColumns.size()];
+        for(int row = 0; row < validRows.size(); row++) {
+            for(int column = 0; column < validColumns.size(); column++) {
+                truncated[row][column] = cells[validRows.get(row)][validColumns.get(column)];
+            }
+        }
+
+        return truncated;
+    }
+
+    private boolean truncatable(EnclosureCell[] enclosureCells) {
+        for (EnclosureCell e: enclosureCells) {
+            if(e.value != Enclosure.OUTSIDE_CONSTANT) {
+                return false;
+            }
+        }
+        return true;
     }
 }
