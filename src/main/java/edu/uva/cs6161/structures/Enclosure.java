@@ -8,7 +8,6 @@ public class Enclosure {
     private EnclosureCell[][] cells;
     private int length;
 
-
     public Enclosure(char[][] tiles) {
         this.length = Math.max(tiles.length, tiles[0].length);
         this.cells = new EnclosureCell[length][length];
@@ -23,7 +22,6 @@ public class Enclosure {
                 cells[row][col] = new EnclosureCell(value, value != OUTSIDE_CONSTANT);
             }
         }
-
     }
 
 
@@ -32,6 +30,20 @@ public class Enclosure {
             throw new IndexOutOfBoundsException();
         }
         return this.cells[row][col];
+    }
+
+    public void grow(int size, char value, boolean inside) {
+        EnclosureCell[][] newCells = new EnclosureCell[size][size];
+        for(int row = 0; row < size; row++) {
+            for(int col = 0; col < size; col++) {
+                if(row >= length || col >= length) {
+                    newCells[row][col] = new EnclosureCell(value, inside);
+                } else {
+                    newCells[row][col] = cells[row][col];
+                }
+            }
+        }
+        this.cells = newCells;
     }
 
     public int getLength() {
@@ -44,8 +56,19 @@ public class Enclosure {
      * @param enclosures
      * @return
      */
-    public static List<Enclosure> normalize(List<Enclosure> enclosures) {
-        return null;
+    public static void normalize(List<Enclosure> enclosures) {
+        if(enclosures == null || enclosures.isEmpty()) {
+            return;
+        }
+
+        int maxSize = Integer.MIN_VALUE;
+        for(Enclosure enclosure : enclosures) {
+            maxSize = Math.max(enclosure.length, maxSize);
+        }
+
+        for(Enclosure enclosure : enclosures) {
+            enclosure.grow(maxSize, 'O', false);
+        }
     }
 
     public boolean validPosition(Enclosure enclosure) {
