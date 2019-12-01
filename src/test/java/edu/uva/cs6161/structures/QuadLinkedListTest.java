@@ -59,6 +59,20 @@ public class QuadLinkedListTest {
         QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][3], names);
     }
 
+    @Test
+    public void testConstructorDefaultNames() {
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][5]);
+        String[] expectedNames = {"A", "B", "C", "D", "E"};
+
+        int i = 0;
+        DataObject obj = quadLinkedList.getRoot();
+        final String[] actualNames = new String[5];
+        while((obj = obj.getR()) != quadLinkedList.getRoot()) {
+            actualNames[i++] = ((ColumnObject) obj).getName();
+        }
+
+        assertArrayEquals(expectedNames, actualNames);
+    }
 
 
     @Test
@@ -84,7 +98,7 @@ public class QuadLinkedListTest {
     }
 
     @Test
-    public void testLeftRight() {
+    public void testLeftRightLinks() {
         int[][] matrix = {
                 {0, 0, 0, 0},
                 {1, 0, 0, 1},

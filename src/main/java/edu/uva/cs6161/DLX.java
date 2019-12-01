@@ -1,5 +1,7 @@
 package edu.uva.cs6161;
 
+import edu.uva.cs6161.handlers.SolutionsHandler;
+import edu.uva.cs6161.handlers.StdoutSolutionsHandler;
 import edu.uva.cs6161.structures.ColumnObject;
 import edu.uva.cs6161.structures.DataObject;
 import edu.uva.cs6161.structures.QuadLinkedList;
@@ -7,16 +9,18 @@ import edu.uva.cs6161.structures.QuadLinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class dlx {
+public class DLX {
 
     private boolean minimizeBranchingFactor;
+    private SolutionsHandler handler;
 
-    public dlx() {
-        this(false);
+    public DLX() {
+        this(false, new StdoutSolutionsHandler());
     }
 
-    public dlx(boolean minimizeBranchingFactor) {
+    public DLX(boolean minimizeBranchingFactor, SolutionsHandler handler) {
         this.minimizeBranchingFactor = minimizeBranchingFactor;
+        this.handler = handler;
     }
 
     public void search(int[][] matrix) {
@@ -30,7 +34,7 @@ public class dlx {
     public void search(QuadLinkedList matrix, int k, List<DataObject> solutions) {
         // If R[h] = h, print the current solution (see below) and return.
         if(matrix.isEmpty()) {
-            printCurrentSolution(solutions);
+            this.handler.handle(solutions);
             return;
         }
 
@@ -58,32 +62,20 @@ public class dlx {
             search(matrix, k+1, solutions);
 
             // set r ← Ok and c ← C[r];
-            r = solutions.get(k);
+            r = solutions.remove(k);
             c = (ColumnObject) r.getC();
 
             // for each j ← L[r], L[L[r]], ... , while j =/= r
             j = r;
             while((j = j.getL()) != r) {
                 // uncover column j (see below).
-                uncoverColumn((ColumnObject) j.getC());
+                uncoverColumn(j.getC());
             }
         }
 
         // Uncover column c (see below) and return.
         uncoverColumn(c);
-
-
     }
-
-    private void printCurrentSolution(List<DataObject> solutions) {
-        for(DataObject o : solutions) {
-            ColumnObject obj = (ColumnObject) o.getC();
-            do {
-                System.out.println(obj.getName());
-            } while((obj = (ColumnObject) o.getR().getC()) != o.getC());
-        }
-    }
-
 
     protected ColumnObject chooseC(QuadLinkedList matrix) {
         ColumnObject root = matrix.getRoot();

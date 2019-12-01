@@ -21,7 +21,7 @@ public class QuadLinkedList {
 
         int numCols = numColumns();
         if(columnNames == null) {
-            columnNames = new String[numCols];
+            columnNames = generateColumnNames(numCols);
         }
 
         if(!columnNamesAreValid(columnNames, numCols)) {
@@ -35,6 +35,15 @@ public class QuadLinkedList {
         this.columnNames = columnNames;
         initializeColumns();
         initializeRows();
+    }
+
+    private String[] generateColumnNames(int numNames) {
+        columnNames = new String[numNames];
+        int ascii = 'A';
+        for(int i = 0; i < numNames; i++) {
+            columnNames[i] = Character.toString((char) ascii++);
+        }
+        return columnNames;
     }
 
     private void initializeColumns() {

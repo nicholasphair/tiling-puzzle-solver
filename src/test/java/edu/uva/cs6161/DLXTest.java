@@ -1,16 +1,16 @@
 package edu.uva.cs6161;
 
+import edu.uva.cs6161.handlers.CollectSolutionsHandler;
+import edu.uva.cs6161.handlers.StdoutSolutionsHandler;
 import edu.uva.cs6161.structures.ColumnObject;
-import edu.uva.cs6161.structures.DataObject;
 import edu.uva.cs6161.structures.QuadLinkedList;
 import org.junit.Test;
 
-import javax.xml.crypto.Data;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class dlxTest {
-
+public class DLXTest {
     public final static int[][] KNUTH_EXAMPLE = {
             {0, 0, 1, 0, 1, 1, 0},
             {1, 0, 0, 1, 0, 0, 1},
@@ -23,22 +23,44 @@ public class dlxTest {
     public final static String[] KNUTH_EXAMPLE_NAMES = { "A", "B", "C", "D", "E", "F", "G"};
 
     @Test
-    public void search() {
+    public void searchKnuthExample() {
+        QuadLinkedList quadLinkedList = new QuadLinkedList(KNUTH_EXAMPLE, KNUTH_EXAMPLE_NAMES);
+
+        CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        DLX solver = new DLX(false, collector);
+        solver.search(quadLinkedList);
+
+        List<String> solutions = collector.collect();
+
+        String expectedSolution = new StringBuilder()
+                .append("A D\n")
+                .append("B G\n")
+                .append("C E F")
+                .toString();
+
+        assertEquals(expectedSolution, solutions.get(0));
+    }
+
+    @Test
+    public void searchNoSolutions() {
 
         int[][] matrix = {
-                {0, 0, 1},
-                {1, 1, 0,}
+                {1, 0, 1, 1},
+                {1, 1, 0, 1},
+                {0, 1, 1, 0}
         };
 
-        String[] names = {"Moe", "Larry", "Curly"};
+        String[] names = {"Moe", "Larry", "Curly", "Schemp"};
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix, names);
 
 
-        dlx solver = new dlx(false);
+        CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        DLX solver = new DLX(false, collector);
         solver.search(quadLinkedList);
 
+        List<String> solutions = collector.collect();
+        assertTrue(solutions.isEmpty());
     }
-
 
     @Test
     public void testChooseCMinimizeBranchingTrue() {
@@ -52,7 +74,7 @@ public class dlxTest {
         String[] names = {"MostOnes", "foobar", "LeastOnes"};
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix, names);
 
-        dlx solver = new dlx(true);
+        DLX solver = new DLX(true, new StdoutSolutionsHandler());
         ColumnObject columnObject = solver.chooseC(quadLinkedList);
 
         assertEquals("LeastOnes", columnObject.getName());
@@ -70,7 +92,7 @@ public class dlxTest {
         String[] names = {"First", "Second", "LeastOnes"};
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix, names);
 
-        dlx solver = new dlx(false);
+        DLX solver = new DLX(false, new StdoutSolutionsHandler());
         ColumnObject columnObject = solver.chooseC(quadLinkedList);
         assertEquals("First", columnObject.getName());
     }
@@ -93,7 +115,7 @@ public class dlxTest {
         assertNotEquals(columnD, columnD.getD().getD());
         assertNotEquals(columnG, columnG.getD().getD().getD());
 
-        dlx knuthDancer = new dlx(false);
+        DLX knuthDancer = new DLX(false, new StdoutSolutionsHandler());
         knuthDancer.coverColumn(columnA);
 
         // After Cover.
@@ -120,7 +142,7 @@ public class dlxTest {
         assertNotEquals(columnD, columnD.getD().getD());
         assertNotEquals(columnG, columnG.getD().getD().getD());
 
-        dlx knuthDancer = new dlx(false);
+        DLX knuthDancer = new DLX(false, new StdoutSolutionsHandler());
         knuthDancer.coverColumn(columnA);
         knuthDancer.uncoverColumn(columnA);
 
