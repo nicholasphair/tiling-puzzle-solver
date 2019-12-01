@@ -1,6 +1,5 @@
 package edu.uva.cs6161.structures;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Enclosure {
@@ -134,13 +133,20 @@ public class Enclosure {
      *
      * @return
      */
-    public Enclosure generateMirroredEnclosure() {
-        return null;
+    public void reflect() {
+        for (int column = 0; column < cells.length; ++column) {  // Extra for loop to go through each row in turn, performing the reversal within that row.
+            EnclosureCell[] tempRow = cells[column];
+            for (int row = 0; row < tempRow.length/2; row++) {
+                EnclosureCell temp = tempRow[row];
+                tempRow[row] = cells[column][tempRow.length-row-1];
+                tempRow[tempRow.length-row-1] = temp;
+            }
+        }
     }
 
 
     /**
-     *
+     * Prints the enclosure's cell values.
      */
     public void printEnclosure() {
         for (int row = 0; row < length; row++) {

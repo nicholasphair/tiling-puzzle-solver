@@ -207,4 +207,33 @@ public class EnclosureTest {
             }
         }
     }
+
+    @Test
+    public void testReflect() {
+        char[][] originalPiece = {
+                {'X', 'O'},
+                {'O', 'O'},
+        };
+
+        char[][] expectedReflectedValue = {
+                {'O', 'X'},
+                {'O', 'O'},
+        };
+
+        Enclosure enclosure = new Enclosure(originalPiece);
+        enclosure.reflect();
+
+        for(int row = 0; row < enclosure.getLength(); row++) {
+            for(int column = 0; column < enclosure.getLength(); column++) {
+                assertEquals(expectedReflectedValue[row][column], enclosure.getEnclosureCell(row, column).value);
+            }
+        }
+
+        enclosure.reflect();
+        for(int row = 0; row < enclosure.getLength(); row++) {
+            for(int column = 0; column < enclosure.getLength(); column++) {
+                assertEquals(originalPiece[row][column], enclosure.getEnclosureCell(row, column).value);
+            }
+        }
+    }
 }
