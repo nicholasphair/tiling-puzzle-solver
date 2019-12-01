@@ -153,4 +153,58 @@ public class EnclosureTest {
         assertEquals(3, smallerEnclosure.getLength());
         assertEquals(3, largerEnclosure.getLength());
     }
+
+    @Test
+    public void testRotate() {
+        char[][] originalPiece = {
+                {'O', 'O'},
+                {'O', 'X'},
+        };
+
+        char[][] expectedRotatedValue = {
+                {'O', 'X'},
+                {'O', 'O'},
+        };
+
+        Enclosure enclosure = new Enclosure(originalPiece);
+        enclosure.rotate();
+
+        for(int row = 0; row < enclosure.getLength(); row++) {
+            for(int column = 0; column < enclosure.getLength(); column++) {
+                assertEquals(expectedRotatedValue[row][column], enclosure.getEnclosureCell(row, column).value);
+            }
+        }
+
+        enclosure.rotate();
+        enclosure.rotate();
+        enclosure.rotate();
+
+        for(int row = 0; row < enclosure.getLength(); row++) {
+            for(int column = 0; column < enclosure.getLength(); column++) {
+                assertEquals(originalPiece[row][column], enclosure.getEnclosureCell(row, column).value);
+            }
+        }
+    }
+
+    @Test
+    public void testClone() {
+        char[][] piece = {
+                {'O', 'X'},
+                {'O', 'X'},
+        };
+
+        Enclosure original = new Enclosure(piece);
+        Enclosure clone = original.clone();
+
+        assertNotEquals(original, clone);
+        for(int row = 0; row < original.getLength(); row++) {
+            for(int column = 0; column < original.getLength(); column++) {
+                EnclosureCell originalCell = original.getEnclosureCell(row, column);
+                EnclosureCell cloneCell = clone.getEnclosureCell(row, column);
+                assertNotEquals(originalCell, cloneCell);
+                assertEquals(originalCell.value, cloneCell.value);
+                assertEquals(originalCell.inside, cloneCell.inside);
+            }
+        }
+    }
 }

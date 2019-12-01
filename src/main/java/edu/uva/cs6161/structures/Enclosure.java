@@ -1,5 +1,6 @@
 package edu.uva.cs6161.structures;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Enclosure {
@@ -24,7 +25,12 @@ public class Enclosure {
         }
     }
 
-
+    /**
+     *
+     * @param row
+     * @param col
+     * @return
+     */
     public EnclosureCell getEnclosureCell(int row, int col) {
         if(row > length - 1 || col > length -1 || row < 0 || col < 0) {
             throw new IndexOutOfBoundsException();
@@ -32,6 +38,12 @@ public class Enclosure {
         return this.cells[row][col];
     }
 
+    /**
+     *
+     * @param size
+     * @param value
+     * @param inside
+     */
     public void grow(int size, char value, boolean inside) {
         if(size < length) {
             return;
@@ -76,6 +88,11 @@ public class Enclosure {
         }
     }
 
+    /**
+     *
+     * @param enclosure
+     * @return
+     */
     public boolean validPosition(Enclosure enclosure) {
         if(length != enclosure.getLength()) {
             throw new IllegalArgumentException("Enclosures must be of the same size");
@@ -96,5 +113,55 @@ public class Enclosure {
             }
         }
         return true;
+    }
+
+    /**
+     * Rotates the enclosure 90 degrees counterclockwise.
+     */
+    public void rotate() {
+        for (int i = 0; i < length/2; i++) {
+            for (int j = i; j < length-i-1; j++) {
+                EnclosureCell temp = getEnclosureCell(i, j);
+                cells[i][j] = cells[j][length-1-i];
+                cells[j][length-1-i] = cells[length-1-i][length-1-j];
+                cells[length-1-i][length-1-j] = cells[length-1-j][i];
+                cells[length-1-j][i] = temp;
+            }
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Enclosure generateMirroredEnclosure() {
+        return null;
+    }
+
+
+    /**
+     *
+     */
+    public void printEnclosure() {
+        for (int row = 0; row < length; row++) {
+            for (int col = 0; col < length; col++) {
+                System.out.print(getEnclosureCell(row, col).value + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Enclosure clone() {
+        char[][] cellClone = new char[length][length];
+        for (int row = 0; row < length; row++) {
+            for (int col = 0; col < length; col++) {
+                cellClone[row][col] = getEnclosureCell(row, col).value;
+            }
+        }
+        return new Enclosure(cellClone);
     }
 }
