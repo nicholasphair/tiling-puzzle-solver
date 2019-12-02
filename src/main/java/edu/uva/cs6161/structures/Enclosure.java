@@ -8,6 +8,8 @@ public class Enclosure {
 
     public static final char OUTSIDE_CONSTANT = '_';
     private EnclosureCell[][] cells;
+
+    private EnclosureCell[][] trucatedCells;
     private int length;
 
     public Enclosure(char[][] tiles) {
@@ -24,6 +26,15 @@ public class Enclosure {
                 cells[row][col] = new EnclosureCell(value, value != OUTSIDE_CONSTANT);
             }
         }
+        this.trucatedCells = truncate();
+    }
+
+    public EnclosureCell[][] getCells() {
+        return cells;
+    }
+
+    public EnclosureCell[][] getTrucatedCells() {
+        return trucatedCells;
     }
 
     /**
@@ -129,6 +140,7 @@ public class Enclosure {
                 cells[length-1-j][i] = temp;
             }
         }
+        this.trucatedCells = truncate();
     }
 
     /**
@@ -144,6 +156,7 @@ public class Enclosure {
                 tempRow[tempRow.length-row-1] = temp;
             }
         }
+        this.trucatedCells = truncate();
     }
 
     /**
@@ -173,25 +186,34 @@ public class Enclosure {
 
     private List<Enclosure> generateAllRotations() {
         List<Enclosure> variants = new ArrayList<>();
+        variants.add(this);
+
         Enclosure variant = this.clone();
-
         variant.rotate();
-
         while(!variant.equals(this)) {
-            if(!variants.contains(variant)) {
-                variants.add(variant);
-            }
+            System.out.println("here");
+            variant.addIfAbsent(variants);
             variant = variant.clone();
             variant.rotate();
         }
 
-        variants.add(this);
         return variants;
+    }
+
+    private void addIfAbsent(List<Enclosure> list) {
+        for(int i = 0; i < list.size(); i++) {
+            if(!Arrays.deepEquals(list.get(i).getTrucatedCells(), getTrucatedCells())) {
+                System.out.println("Adding: ");
+                printCells();
+                list.add(this);
+                return;
+            }
+        }
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(cells);
+        return Arrays.deepHashCode(truncate());
     }
 
     @Override
@@ -205,32 +227,14 @@ public class Enclosure {
         }
 
         Enclosure enclosure = (Enclosure) obj;
-        if(this.length != enclosure.getLength()) {
+        EnclosureCell[][] enclosureCells = enclosure.truncate();
+        EnclosureCell[][] thisCells = truncate();
+
+        if(thisCells.length != enclosureCells.length || thisCells[0].length != enclosureCells[0].length) {
             return false;
         }
 
-        for(int row = 0; row < length; row++) {
-            for(int col = 0; col < length; col++) {
-                EnclosureCell enclosureCell = enclosure.getEnclosureCell(row, col);
-                EnclosureCell thisCell = getEnclosureCell(row, col);
-                if(enclosureCell.value != thisCell.value || enclosureCell.inside != thisCell.inside) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Prints the enclosure's cell values.
-     */
-    public void printEnclosure() {
-        for(int row = 0; row < length; row++) {
-            for(int col = 0; col < length; col++) {
-                System.out.print(getEnclosureCell(row, col).value + " ");
-            }
-            System.out.println();
-        }
+        return Arrays.deepEquals(thisCells, enclosureCells);
     }
 
     public EnclosureCell[][] truncate() {
@@ -270,5 +274,22 @@ public class Enclosure {
             }
         }
         return true;
+    }
+
+    public void printCells() {
+        printCellMatrix(this.cells);
+    }
+
+    public void printTruncatedCells() {
+        printCellMatrix(this.trucatedCells);
+    }
+
+    private static void printCellMatrix(EnclosureCell[][] matrix) {
+        for(int row = 0; row < matrix.length; row++) {
+            for(int col = 0; col < matrix[0].length; col++) {
+                System.out.print(matrix[row][col].value + " ");
+            }
+            System.out.println();
+        }
     }
 }

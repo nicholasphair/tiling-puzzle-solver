@@ -253,56 +253,36 @@ public class EnclosureTest {
 
     @Test
     public void testGenerateAllVariants() {
-        char[][] f = {
-                {'_', 'X', 'X'},
-                {'X', 'X', '_'},
-                {'_', 'X', '_'},
-        };
+        Enclosure f = new Enclosure(PentominoArrays.F);
+        Enclosure l = new Enclosure(PentominoArrays.L);
+        Enclosure n = new Enclosure(PentominoArrays.N);
+        Enclosure p = new Enclosure(PentominoArrays.P);
+        Enclosure y = new Enclosure(PentominoArrays.Y);
+        Enclosure t = new Enclosure(PentominoArrays.T);
+        Enclosure u = new Enclosure(PentominoArrays.U);
+        Enclosure v = new Enclosure(PentominoArrays.V);
+        Enclosure w = new Enclosure(PentominoArrays.W);
+        Enclosure z = new Enclosure(PentominoArrays.Z);
+        Enclosure i = new Enclosure(PentominoArrays.I);
+        Enclosure x = new Enclosure(PentominoArrays.X);
 
-        char[][] l = {
-                {'X', '_'},
-                {'X', '_'},
-                {'X', '_'},
-                {'X', 'X'},
-        };
-
-        char[][] z = {
-                {'X', 'X', '_'},
-                {'_', 'X', '_'},
-                {'_', 'X', 'X'},
-        };
-
-        char[][] x = {
-                {'X', '_', 'X'},
-                {'_', 'X', '_'},
-                {'X', '_', 'X'},
-        };
-
-        char[][] i = {
-                {'X'},
-                {'X'},
-                {'X'},
-                {'X'},
-                {'X'},
-        };
-
-        char[][] w = {
-                {'X', '_', 'X', '_', 'X'},
-                {'_', 'X', '_', 'X', '_'},
-        };
-        f=l;
-
-        Enclosure enclosureF = new Enclosure(f);
-        List<Enclosure> fEnclosures = enclosureF.generateAllVariants();
-        for(Enclosure e : fEnclosures) {
-            e.printEnclosure();
-            System.out.println();
-        }
+        assertEquals(8, f.generateAllVariants().size());
+        assertEquals(8, l.generateAllVariants().size());
+        assertEquals(8, n.generateAllVariants().size());
+        assertEquals(8, p.generateAllVariants().size());
+        assertEquals(8, y.generateAllVariants().size());
+        assertEquals(4, t.generateAllVariants().size());
+        assertEquals(4, u.generateAllVariants().size());
+        assertEquals(4, v.generateAllVariants().size());
+        assertEquals(4, w.generateAllVariants().size());
+        assertEquals(4, z.generateAllVariants().size());
+        assertEquals(2, i.generateAllVariants().size());
+        assertEquals(1, x.generateAllVariants().size());
     }
 
     @Test
     public void testTruncate() {
-        char[][] i = {
+        char[][] test = {
                 {'_', '_'},
                 {'X', '_'},
                 {'X', '_'},
@@ -317,8 +297,32 @@ public class EnclosureTest {
                 {'X'},
         };
 
-        Enclosure enclosureI = new Enclosure(i);
-        EnclosureCell[][] truncated = enclosureI.truncate();
+        Enclosure enclosureTest = new Enclosure(test);
+        EnclosureCell[][] truncated = enclosureTest.truncate();
+
+        for (int row = 0; row < truncated.length; row++) {
+            for (int col = 0; col < truncated[0].length; col++) {
+                assertEquals(expectedTruncatedValue[row][col], truncated[row][col].value);
+            }
+        }
+    }
+
+    @Test
+    public void testTruncate2() {
+        char[][] test = {
+                {'_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_'},
+                {'X', 'X', 'X', 'X', 'X'},
+        };
+
+        char[][] expectedTruncatedValue = {
+                {'X', 'X', 'X', 'X', 'X'},
+        };
+
+        Enclosure enclosureTest = new Enclosure(test);
+        EnclosureCell[][] truncated = enclosureTest.truncate();
 
         for (int row = 0; row < truncated.length; row++) {
             for (int col = 0; col < truncated[0].length; col++) {
