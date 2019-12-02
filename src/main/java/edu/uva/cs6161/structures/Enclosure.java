@@ -209,7 +209,6 @@ public class Enclosure {
         Enclosure variant = this.clone();
         variant.rotate();
         while(!variant.equals(this)) {
-            System.out.println("here");
             variant.addIfAbsent(variants);
             variant = variant.clone();
             variant.rotate();
@@ -221,8 +220,6 @@ public class Enclosure {
     private void addIfAbsent(List<Enclosure> list) {
         for(int i = 0; i < list.size(); i++) {
             if(!Arrays.deepEquals(list.get(i).getTrucatedCells(), getTrucatedCells())) {
-                System.out.println("Adding: ");
-                printCells();
                 list.add(this);
                 return;
             }
