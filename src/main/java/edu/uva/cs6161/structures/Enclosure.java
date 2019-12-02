@@ -162,7 +162,7 @@ public class Enclosure {
      * @return
      */
     public void reflect() {
-        for(int column = 0; column < cells.length; ++column) {  // Extra for loop to go through each row in turn, performing the reversal within that row.
+        for(int column = 0; column < cells.length; ++column) {
             EnclosureCell[] tempRow = cells[column];
             for(int row = 0; row < tempRow.length/2; row++) {
                 EnclosureCell temp = tempRow[row];
