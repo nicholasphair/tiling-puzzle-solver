@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Enclosure {
-
     public static final char OUTSIDE_CONSTANT = '_';
-    private EnclosureCell[][] cells;
 
+    private EnclosureCell[][] cells;
     private EnclosureCell[][] trucatedCells;
     private int length;
 
+    /**
+     * Build an Enclosure object from a 2D char array.
+     * @param tiles
+     */
     public Enclosure(char[][] tiles) {
         this.length = Math.max(tiles.length, tiles[0].length);
         this.cells = new EnclosureCell[length][length];
@@ -29,19 +32,27 @@ public class Enclosure {
         this.trucatedCells = truncate();
     }
 
+    /**
+     * The internal structure holding cell values.
+     * @return
+     */
     public EnclosureCell[][] getCells() {
         return cells;
     }
 
+    /**
+     * A truncated/trimmed view of the structure holding cell values.
+     * What this means is any row or columns that are entirely 'OUTSIDE_CONSTANT' values are removed.
+     * @return
+     */
     public EnclosureCell[][] getTrucatedCells() {
         return trucatedCells;
     }
 
     /**
-     *
      * @param row
      * @param col
-     * @return
+     * @return the cell are index (row,col).
      */
     public EnclosureCell getEnclosureCell(int row, int col) {
         if(row > length - 1 || col > length -1 || row < 0 || col < 0) {
@@ -51,7 +62,7 @@ public class Enclosure {
     }
 
     /**
-     *
+     *  Grow the internal cells array so that it has an area of size*size.
      * @param size
      * @param value
      * @param inside
@@ -75,6 +86,9 @@ public class Enclosure {
         this.cells = newCells;
     }
 
+    /**
+     * @return sqrt(area(cells)).
+     */
     public int getLength() {
         return length;
     }
@@ -173,6 +187,10 @@ public class Enclosure {
         return new Enclosure(cellClone);
     }
 
+    /**
+     * All possible rotations and reflections of an Enclosure object.
+     * @return
+     */
     public List<Enclosure> generateAllVariants() {
         List<Enclosure> variants = generateAllRotations();
 
@@ -211,32 +229,11 @@ public class Enclosure {
         }
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(truncate());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(this == obj) {
-            return true;
-        }
-
-        if(obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-
-        Enclosure enclosure = (Enclosure) obj;
-        EnclosureCell[][] enclosureCells = enclosure.truncate();
-        EnclosureCell[][] thisCells = truncate();
-
-        if(thisCells.length != enclosureCells.length || thisCells[0].length != enclosureCells[0].length) {
-            return false;
-        }
-
-        return Arrays.deepEquals(thisCells, enclosureCells);
-    }
-
+    /**
+     * Truncate cells.
+     * What this means is any row or columns that are entirely 'OUTSIDE_CONSTANT' values are removed.
+     * @return
+     */
     public EnclosureCell[][] truncate() {
         List<Integer> validRows = new ArrayList<>();
         for(int row = 0; row < length; row++) {
@@ -276,10 +273,16 @@ public class Enclosure {
         return true;
     }
 
+    /**
+     * Pretty Print the cells array.
+     */
     public void printCells() {
         printCellMatrix(this.cells);
     }
 
+    /**
+     * Pretty Print the truncateCells array.
+     */
     public void printTruncatedCells() {
         printCellMatrix(this.trucatedCells);
     }
@@ -291,5 +294,31 @@ public class Enclosure {
             }
             System.out.println();
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(truncate());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+
+        if(obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Enclosure enclosure = (Enclosure) obj;
+        EnclosureCell[][] enclosureCells = enclosure.truncate();
+        EnclosureCell[][] thisCells = truncate();
+
+        if(thisCells.length != enclosureCells.length || thisCells[0].length != enclosureCells[0].length) {
+            return false;
+        }
+
+        return Arrays.deepEquals(thisCells, enclosureCells);
     }
 }
