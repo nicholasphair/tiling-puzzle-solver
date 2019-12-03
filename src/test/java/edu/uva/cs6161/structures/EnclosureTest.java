@@ -1,5 +1,6 @@
 package edu.uva.cs6161.structures;
 
+import edu.uva.cs6161.utils.PentominoArrays;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -8,6 +9,30 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class EnclosureTest {
+
+    @Test
+    public void testCellConstructor() {
+        EnclosureCell[][] piece = {
+                {new EnclosureCell('0', true), new EnclosureCell('0', true)},
+                {new EnclosureCell('X', true), new EnclosureCell('0', true)},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+        assertEquals(2, enclosure.getLength());
+        assertArrayEquals(piece, enclosure.getCells());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellConstructorWithNonSquareMatrix() {
+        EnclosureCell[][] piece = {
+                {new EnclosureCell('0', true), new EnclosureCell('0', true)},
+                {new EnclosureCell('X', true), new EnclosureCell('0', true)},
+                {new EnclosureCell('X', true), new EnclosureCell('0', true)},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+    }
+
 
     @Test
     public void testLengthIsLongestSide() {
@@ -121,6 +146,7 @@ public class EnclosureTest {
                 assertEquals(expectedValues[row][col], enclosure.getEnclosureCell(row, col).value);
             }
         }
+        assertEquals(4, enclosure.getLength());
     }
 
     @Test
@@ -252,6 +278,26 @@ public class EnclosureTest {
     }
 
     @Test
+    public void testTruncatedEquals() {
+        char[][] piece = {
+                {'_', 'X'},
+                {'_', 'X'},
+        };
+
+        char[][] piece2 = {
+                {'X', '_'},
+                {'X', '_'},
+        };
+
+        Enclosure enclosureA = new Enclosure(piece);
+        Enclosure enclosureB = new Enclosure(piece2);
+
+        assertNotEquals(enclosureA, enclosureB);
+        assertTrue(enclosureA.truncatedEquals(enclosureB));
+    }
+
+
+    @Test
     public void testGenerateAllVariants() {
         Enclosure f = new Enclosure(PentominoArrays.F);
         Enclosure l = new Enclosure(PentominoArrays.L);
@@ -330,4 +376,81 @@ public class EnclosureTest {
             }
         }
     }
+
+    @Test
+    public void testTruncate3() {
+        char[][] piece = {
+                {'X', '_'},
+                {'X', '_'},
+        };
+
+        char[][] expectedTruncatedValue = {
+                {'X'},
+                {'X'},
+        };
+
+        Enclosure enclosureTest = new Enclosure(piece);
+        EnclosureCell[][] truncated = enclosureTest.truncate();
+
+        for (int row = 0; row < truncated.length; row++) {
+            for (int col = 0; col < truncated[0].length; col++) {
+                assertEquals(expectedTruncatedValue[row][col], truncated[row][col].value);
+            }
+        }
+    }
+
+    @Test
+    public void testPad() {
+        char[][] piece = {
+                {'X', 'X'},
+                {'X', 'X'},
+        };
+
+        char[][] expectedPaddedPiece = {
+                {'_', '_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_', '_'},
+                {'_', '_', 'X', 'X', '_', '_'},
+                {'_', '_', 'X', 'X', '_', '_'},
+                {'_', '_', '_', '_', '_', '_'},
+                {'_', '_', '_', '_', '_', '_'},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+        enclosure.pad(2, '_', false);
+
+        enclosure.printCells();
+        assertEquals(new Enclosure(expectedPaddedPiece), enclosure);
+        assertEquals(6, enclosure.getLength());
+    }
+
+    @Test
+    public void testSlice() {
+        char[][] piece = {
+                {'X', '_', 'X'},
+                {'_', 'X', 'X'},
+                {'X', 'X', 'X'},
+        };
+
+        char[][] expectedTopLeftSlice = {
+                {'X', '_'},
+                {'_', 'X'},
+        };
+
+        char[][] expectedBottomRightSlice = {
+                {'X', 'X'},
+                {'X', 'X'},
+        };
+
+
+        Enclosure topLeftSliceEnclosure = new Enclosure(expectedTopLeftSlice);
+        Enclosure bottomRightSliceEnclosure = new Enclosure(expectedBottomRightSlice);
+
+        Enclosure enclosure = new Enclosure(piece);
+        Enclosure actualTopLeftSliceEnclosure = enclosure.slice(0, 2, 0, 2);
+        Enclosure actualBottomRightSliceEnclosure = enclosure.slice(1, 3, 1, 3);
+
+        assertEquals(topLeftSliceEnclosure, actualTopLeftSliceEnclosure);
+        assertEquals(bottomRightSliceEnclosure, actualBottomRightSliceEnclosure);
+    }
+
 }

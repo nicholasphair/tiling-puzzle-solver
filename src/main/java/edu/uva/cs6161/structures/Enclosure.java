@@ -3,12 +3,15 @@ package edu.uva.cs6161.structures;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
+// TODO: write something to make sure pieces are oriented properly.
 public class Enclosure {
     public static final char OUTSIDE_CONSTANT = '_';
 
     private EnclosureCell[][] cells;
     private EnclosureCell[][] trucatedCells;
+    private String name;
     private int length;
 
     /**
@@ -30,6 +33,39 @@ public class Enclosure {
             }
         }
         this.trucatedCells = truncate();
+        this.name = "";
+    }
+
+    public Enclosure(EnclosureCell[][] tiles) {
+        if(tiles == null || tiles.length != tiles[0].length) {
+            throw new IllegalArgumentException("It is currently required that tiles be a square matrix.");
+        }
+
+        this.cells = tiles;
+        this.length = tiles.length;
+        this.trucatedCells = truncate();
+        this.name = "";
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     *
+     * @param startRow inclusive
+     * @param endRow exclusive
+     * @param startCol inclusive
+     * @param endCol exclusive
+     * @return
+     */
+    public Enclosure slice(int startRow, int endRow, int startCol, int endCol) {
+        EnclosureCell[][] slice = new EnclosureCell[endRow-startRow][endCol-startCol];
+        for(int row = startRow, i = 0; row < endRow; row++, i++) {
+            slice[i] = Arrays.copyOfRange(cells[row], startCol, endCol);
+        }
+
+        return new Enclosure(slice);
     }
 
     /**
@@ -84,6 +120,35 @@ public class Enclosure {
         }
         this.length = size;
         this.cells = newCells;
+    }
+
+    /**
+     * Pad the Enclosure in all directions
+     * Usage: well call this w/ piece.size
+     * @param padding
+     */
+    public void pad(int padding, char value, boolean inside) {
+        if(padding < 1) {
+            return;
+        }
+
+        int newSize = 2 * padding + length;
+        EnclosureCell[][] newCells = new EnclosureCell[newSize][newSize];
+        for(int row = 0; row < newSize; row++) {
+            for(int col = 0; col < newSize; col++) {
+                newCells[row][col] = new EnclosureCell(value, inside);
+            }
+        }
+
+        for(int row = 0; row < length; row++) {
+            for(int col = 0; col < length; col++) {
+                newCells[row+padding][col+padding] = cells[row][col];
+            }
+        }
+
+        this.cells = newCells;
+        this.length = newSize;
+        this.trucatedCells = truncate();
     }
 
     /**
@@ -193,37 +258,46 @@ public class Enclosure {
      */
     public List<Enclosure> generateAllVariants() {
         List<Enclosure> variants = generateAllRotations();
+        Predicate<Enclosure> unique = ((Predicate) variants::contains).negate();
 
         Enclosure reflection = this.clone();
         reflection.reflect();
-        List<Enclosure> reflectedVariants = reflection.generateAllRotations();
-        reflectedVariants.stream().filter(x -> !variants.contains(x)).forEach(variants::add);
+        reflection.generateAllRotations()
+                .stream()
+                .filter(unique)
+                .forEach(variants::add);
 
         return variants;
     }
 
     private List<Enclosure> generateAllRotations() {
-        List<Enclosure> variants = new ArrayList<>();
-        variants.add(this);
+        List<Enclosure> variants = new ArrayList() {
+            @Override
+            public boolean contains(Object o) {
+                if (o == null) {
+                    return super.contains(null);
+                }
+                for(Object obj : this) {
+                    Enclosure e = (Enclosure) obj;
+                    Enclosure f = (Enclosure) o;
+                    if(e.truncatedEquals(f)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
 
+        variants.add(this);
         Enclosure variant = this.clone();
         variant.rotate();
-        while(!variant.equals(this)) {
-            variant.addIfAbsent(variants);
+        while(!variant.truncatedEquals(this)) {
+            variants.add(variant);
             variant = variant.clone();
             variant.rotate();
         }
 
         return variants;
-    }
-
-    private void addIfAbsent(List<Enclosure> list) {
-        for(int i = 0; i < list.size(); i++) {
-            if(!Arrays.deepEquals(list.get(i).getTrucatedCells(), getTrucatedCells())) {
-                list.add(this);
-                return;
-            }
-        }
     }
 
     /**
@@ -295,7 +369,7 @@ public class Enclosure {
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(truncate());
+        return Arrays.deepHashCode(cells);
     }
 
     @Override
@@ -309,13 +383,20 @@ public class Enclosure {
         }
 
         Enclosure enclosure = (Enclosure) obj;
-        EnclosureCell[][] enclosureCells = enclosure.truncate();
-        EnclosureCell[][] thisCells = truncate();
+        EnclosureCell[][] enclosureCells = enclosure.getCells();
+        return Arrays.deepEquals(cells, enclosureCells);
+    }
 
-        if(thisCells.length != enclosureCells.length || thisCells[0].length != enclosureCells[0].length) {
+    public boolean truncatedEquals(Enclosure enclosure) {
+        if(this == enclosure) {
+            return true;
+        }
+
+        if(enclosure == null) {
             return false;
         }
 
-        return Arrays.deepEquals(thisCells, enclosureCells);
+        EnclosureCell[][] enclosureCells = enclosure.getTrucatedCells();
+        return Arrays.deepEquals(trucatedCells, enclosureCells);
     }
 }
