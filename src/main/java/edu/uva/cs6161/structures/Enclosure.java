@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
+// TODO: write something to make sure pieces are oriented properly.
 public class Enclosure {
     public static final char OUTSIDE_CONSTANT = '_';
 

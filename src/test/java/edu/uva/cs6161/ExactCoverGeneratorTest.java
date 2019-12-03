@@ -36,7 +36,7 @@ public class ExactCoverGeneratorTest {
 
 
     @Test
-    public void petominoPossibilities() {
+    public void testPentominoPossibilities() {
         char[][] board = {
                 {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
                 {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -49,7 +49,6 @@ public class ExactCoverGeneratorTest {
         };
 
         Enclosure enclosureBoard = new Enclosure(board);
-
         List<Enclosure> pentominos = PentominoArrays.ALL_PENTOMINOS
                 .stream()
                 .map(Enclosure::new)
@@ -57,10 +56,10 @@ public class ExactCoverGeneratorTest {
                 .collect(Collectors.toList());
 
         ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pentominos, enclosureBoard);
+        exactCoverGenerator.generateMatrix();
 
-        assertEquals(1568, exactCoverGenerator.generateMatrix());
-
-
+        // See page 3. https://arxiv.org/pdf/cs/0011047.pdf
+        assertEquals(1568, exactCoverGenerator.getPossibilitiesAsEnclosures().size());
     }
 
 

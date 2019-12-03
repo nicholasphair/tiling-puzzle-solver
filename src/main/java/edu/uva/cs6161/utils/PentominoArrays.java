@@ -31,10 +31,8 @@ public final class PentominoArrays {
     };
 
     public static final char[][] Y = {
-            {'_', 'X', '_', 'X'},
             {'_', '_', 'X', '_'},
-            {'_', 'X', '_', '_'},
-            {'X', '_', '_', '_'},
+            {'X', 'X', 'X', 'X'},
     };
 
     public static final char[][] T = {
@@ -55,8 +53,9 @@ public final class PentominoArrays {
     };
 
     public static final char[][] W = {
-            {'X', '_', 'X', '_', 'X'},
-            {'_', 'X', '_', 'X', '_'},
+            {'_', '_', 'X'},
+            {'_', 'X', 'X'},
+            {'X', 'X', '_'},
     };
 
     public static final char[][] Z = {
@@ -74,9 +73,9 @@ public final class PentominoArrays {
     };
 
     public static final char[][] X = {
-            {'X', '_', 'X'},
             {'_', 'X', '_'},
-            {'X', '_', 'X'},
+            {'X', 'X', 'X'},
+            {'_', 'X', '_'},
     };
 
     public static final List<char[][]> ALL_PENTOMINOS= new ArrayList<>();

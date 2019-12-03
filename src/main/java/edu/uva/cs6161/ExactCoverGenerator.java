@@ -23,7 +23,6 @@ public class ExactCoverGenerator {
 
     public int generateMatrix() {
         int[][] exactCoverMatrix;
-        System.out.println("pieces " + pieces.size());
         for(Enclosure piece : pieces) {
             buildEnclosurePossibilitiesFromBoard(piece);
             //break;
@@ -35,6 +34,11 @@ public class ExactCoverGenerator {
         //System.out.println(possibilities.size());
         return possibilities.size();
     }
+
+    public List<Enclosure> getPossibilitiesAsEnclosures() {
+        return this.possibilities;
+    }
+
 
     private int countValidCells() {
         int count = 0;
