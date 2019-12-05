@@ -1,11 +1,9 @@
 package edu.uva.cs6161;
 
 import edu.uva.cs6161.structures.Enclosure;
-import edu.uva.cs6161.structures.EnclosureCell;
+import edu.uva.cs6161.structures.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Generate a matrix that can be solved by dlx.
@@ -13,78 +11,105 @@ import java.util.List;
 public class ExactCoverGenerator {
     private List<Enclosure> pieces;
     private Enclosure board;
-    private List<Enclosure> possibilities;
+    private List<int[]> possibilities;
+    private Map<Pair, Integer> indexMap;
 
+    /**
+     *
+     * @param pieces the pieces to the puzzle, do not include variants.
+     * @param board
+     */
     public ExactCoverGenerator(List<Enclosure> pieces, Enclosure board) {
         this.pieces = pieces;
         this.board = board;
         this.possibilities = new ArrayList<>();
+        this.indexMap = buildCoordinateToIndexMap();
     }
 
-    public int generateMatrix() {
-        int[][] exactCoverMatrix;
-        for(Enclosure piece : pieces) {
-            buildEnclosurePossibilitiesFromBoard(piece);
-            //break;
-        }
+    private Map<Pair, Integer> buildCoordinateToIndexMap() {
+        Map<Pair, Integer> map = new HashMap<>();
 
-        //int validCellCount = countValidCells();
-
-        //exactCoverMatrix = new int[possibilities.size()][pieces.size()+validCellCount];
-        //System.out.println(possibilities.size());
-        return possibilities.size();
-    }
-
-    public List<Enclosure> getPossibilitiesAsEnclosures() {
-        return this.possibilities;
-    }
-
-
-    private int countValidCells() {
-        int count = 0;
-        for(EnclosureCell[] row : board.getCells()) {
-            for(EnclosureCell col : row) {
-                count += col.value == '_' ? 0 : 1;
+        Integer i = 0;
+        for(int row = 0; row < board.getLength(); row++) {
+            for(int col = 0; col < board.getLength(); col++) {
+                if(board.getEnclosureCell(row, col).value != Enclosure.OUTSIDE_CONSTANT) {
+                    map.put(new Pair(row, col), i++);
+                }
             }
         }
-        return count;
+        return map;
     }
 
-    public void buildEnclosurePossibilitiesFromBoard(Enclosure piece) {
-        Enclosure paddedBoard = board.clone();
-        paddedBoard.pad(piece.getLength(), '_', false);
+    public Map<Pair, Integer> getIndexMap() {
+        return this.indexMap;
+    }
 
-        for(int startRow = 0, endRow = piece.getLength(); endRow < paddedBoard.getLength() + 1; startRow++, endRow++) {
-            for(int startCol = 0, endCol = piece.getLength(); endCol < paddedBoard.getLength() + 1; startCol++, endCol++) {
+
+    public void generateMatrix() {
+        for(Enclosure piece : pieces) {
+            addPossibilities(piece);
+        }
+    }
+
+    public void generateMatrixWithVariants() {
+        for(Enclosure piece : pieces) {
+            for(Enclosure variant : piece.generateAllVariants()) {
+                addPossibilities(variant);
+            }
+        }
+    }
+
+    public int[][] getMatrix() {
+        int[][] matrix = new int[possibilities.size()][pieces.size() + indexMap.size()];
+        for(int i = 0; i < possibilities.size(); i++) {
+            matrix[i] = possibilities.get(i);
+        }
+        return matrix;
+    }
+
+    /**
+     *
+     * @param piece
+     */
+    public void addPossibilities(Enclosure piece) {
+        Enclosure paddedBoard = board.clone();
+        paddedBoard.pad(piece.getLength(), Enclosure.OUTSIDE_CONSTANT, false);
+
+        int pieceLength = piece.getLength();
+        int paddedBoardLength = paddedBoard.getLength();
+        for(int startRow = 0, endRow = pieceLength; endRow < paddedBoardLength + 1; startRow++, endRow++) {
+            for(int startCol = 0, endCol = pieceLength; endCol < paddedBoardLength + 1; startCol++, endCol++) {
                 Enclosure boardSlice = paddedBoard.slice(startRow, endRow, startCol, endCol);
                 if(boardSlice.validPosition(piece)) {
-                    possibilities.add(boardSlice);
-                    //System.out.println("Is valid on board slice");
-
-                } else {
-                    //System.out.println("====================");
-                    //System.out.println();
-                    //Enclosure e = paddedBoard.clone();
-                    //e.getCells()[startRow][startCol].value = '*';
-                    //e.getCells()[startRow][endCol-1].value = '*';
-                    //e.getCells()[endRow-1][startCol].value = '*';
-                    //e.getCells()[endRow-1][endCol-1].value = '*';
-                    //e.printCells();
-                    //System.out.println();
-                    //System.out.println();
-
-                    //System.out.println("Piece: ");
-                    //piece.printCells();
-                    //System.out.println();
-                    //System.out.println("Is NOT valid on board slice");
-                    //boardSlice.printCells();
-
-                    //System.out.println();
-                    //System.out.println("++++++++++++++++++++");
-                    //System.out.println();
+                    int r = startRow - pieceLength;
+                    int c = startCol - pieceLength;
+                    possibilities.add(mapToCells(piece, r, c));
                 }
-
             }
         }
+    }
+
+    public int[] mapToCells(Enclosure piece, int startRow, int startCol) {
+        int[] rowPossibility = new int[pieces.size() + indexMap.size()];
+
+        System.out.println(piece.getName());
+        for(int row = 0; row < piece.getLength(); row++) {
+            for(int col = 0; col < piece.getLength(); col++) {
+                if(piece.getEnclosureCell(row, col).value != Enclosure.OUTSIDE_CONSTANT) {
+                    Pair key = new Pair(startRow + row, startCol + col);
+                    rowPossibility[indexMap.get(key)] = 1;
+                }
+            }
+        }
+
+        //System.out.println();
+        //for(int i : rowPossibility) {
+        //    System.out.print(i + " ");
+        //}
+        //System.out.println();
+        //System.out.println();
+
+
+        return rowPossibility;
     }
 }

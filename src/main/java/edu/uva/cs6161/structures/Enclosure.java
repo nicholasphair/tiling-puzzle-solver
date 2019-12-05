@@ -10,7 +10,7 @@ public class Enclosure {
     public static final char OUTSIDE_CONSTANT = '_';
 
     private EnclosureCell[][] cells;
-    private EnclosureCell[][] trucatedCells;
+    private EnclosureCell[][] truncatedCells;
     private String name;
     private int length;
 
@@ -32,7 +32,7 @@ public class Enclosure {
                 cells[row][col] = new EnclosureCell(value, value != OUTSIDE_CONSTANT);
             }
         }
-        this.trucatedCells = truncate();
+        this.truncatedCells = truncate();
         this.name = "";
     }
 
@@ -43,12 +43,16 @@ public class Enclosure {
 
         this.cells = tiles;
         this.length = tiles.length;
-        this.trucatedCells = truncate();
+        this.truncatedCells = truncate();
         this.name = "";
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**
@@ -82,7 +86,7 @@ public class Enclosure {
      * @return
      */
     public EnclosureCell[][] getTrucatedCells() {
-        return trucatedCells;
+        return truncatedCells;
     }
 
     /**
@@ -148,7 +152,7 @@ public class Enclosure {
 
         this.cells = newCells;
         this.length = newSize;
-        this.trucatedCells = truncate();
+        this.truncatedCells = truncate();
     }
 
     /**
@@ -219,7 +223,7 @@ public class Enclosure {
                 cells[length-1-j][i] = temp;
             }
         }
-        this.trucatedCells = truncate();
+        this.truncatedCells = truncate();
     }
 
     /**
@@ -235,7 +239,7 @@ public class Enclosure {
                 tempRow[tempRow.length-row-1] = temp;
             }
         }
-        this.trucatedCells = truncate();
+        this.truncatedCells = truncate();
     }
 
     /**
@@ -355,7 +359,7 @@ public class Enclosure {
      * Pretty Print the truncateCells array.
      */
     public void printTruncatedCells() {
-        printCellMatrix(this.trucatedCells);
+        printCellMatrix(this.truncatedCells);
     }
 
     private static void printCellMatrix(EnclosureCell[][] matrix) {
@@ -397,6 +401,6 @@ public class Enclosure {
         }
 
         EnclosureCell[][] enclosureCells = enclosure.getTrucatedCells();
-        return Arrays.deepEquals(trucatedCells, enclosureCells);
+        return Arrays.deepEquals(truncatedCells, enclosureCells);
     }
 }

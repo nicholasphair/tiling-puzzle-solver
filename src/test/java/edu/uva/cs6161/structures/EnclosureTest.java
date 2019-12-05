@@ -418,7 +418,6 @@ public class EnclosureTest {
         Enclosure enclosure = new Enclosure(piece);
         enclosure.pad(2, '_', false);
 
-        enclosure.printCells();
         assertEquals(new Enclosure(expectedPaddedPiece), enclosure);
         assertEquals(6, enclosure.getLength());
     }

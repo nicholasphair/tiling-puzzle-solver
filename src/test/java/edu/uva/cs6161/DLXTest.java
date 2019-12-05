@@ -39,6 +39,7 @@ public class DLXTest {
                 .append("C E F")
                 .toString();
 
+        System.out.println(solutions.get(0));
         assertEquals(expectedSolution, solutions.get(0));
     }
 
