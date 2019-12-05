@@ -3,6 +3,7 @@ package edu.uva.cs6161.structures;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 // TODO: write something to make sure pieces are oriented properly.
@@ -253,7 +254,10 @@ public class Enclosure {
                 cellClone[row][col] = getEnclosureCell(row, col).value;
             }
         }
-        return new Enclosure(cellClone);
+
+        Enclosure e = new Enclosure(cellClone);
+        e.setName(name);
+        return e;
     }
 
     /**
@@ -373,7 +377,7 @@ public class Enclosure {
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(cells);
+        return Objects.hash(Arrays.deepHashCode(cells), name);
     }
 
     @Override
@@ -388,7 +392,7 @@ public class Enclosure {
 
         Enclosure enclosure = (Enclosure) obj;
         EnclosureCell[][] enclosureCells = enclosure.getCells();
-        return Arrays.deepEquals(cells, enclosureCells);
+        return Arrays.deepEquals(cells, enclosureCells) && enclosure.getName().equals(name);
     }
 
     public boolean truncatedEquals(Enclosure enclosure) {
@@ -401,6 +405,6 @@ public class Enclosure {
         }
 
         EnclosureCell[][] enclosureCells = enclosure.getTrucatedCells();
-        return Arrays.deepEquals(truncatedCells, enclosureCells);
+        return Arrays.deepEquals(truncatedCells, enclosureCells) && enclosure.getName().equals(name);
     }
 }

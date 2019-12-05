@@ -1,6 +1,6 @@
 package edu.uva.cs6161.structures;
 
-import edu.uva.cs6161.utils.PentominoArrays;
+import edu.uva.cs6161.utils.PentominoUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class EnclosureTest {
                 {new EnclosureCell('X', true), new EnclosureCell('0', true)},
         };
 
-        Enclosure enclosure = new Enclosure(piece);
+        new Enclosure(piece);
     }
 
 
@@ -275,6 +275,10 @@ public class EnclosureTest {
 
         assertNotSame(enclosureA, enclosureB);
         assertEquals(enclosureA, enclosureB);
+
+        enclosureA.setName("foo");
+        enclosureB.setName("bar");
+        assertNotEquals(enclosureA, enclosureB);
     }
 
     @Test
@@ -299,18 +303,18 @@ public class EnclosureTest {
 
     @Test
     public void testGenerateAllVariants() {
-        Enclosure f = new Enclosure(PentominoArrays.F);
-        Enclosure l = new Enclosure(PentominoArrays.L);
-        Enclosure n = new Enclosure(PentominoArrays.N);
-        Enclosure p = new Enclosure(PentominoArrays.P);
-        Enclosure y = new Enclosure(PentominoArrays.Y);
-        Enclosure t = new Enclosure(PentominoArrays.T);
-        Enclosure u = new Enclosure(PentominoArrays.U);
-        Enclosure v = new Enclosure(PentominoArrays.V);
-        Enclosure w = new Enclosure(PentominoArrays.W);
-        Enclosure z = new Enclosure(PentominoArrays.Z);
-        Enclosure i = new Enclosure(PentominoArrays.I);
-        Enclosure x = new Enclosure(PentominoArrays.X);
+        Enclosure f = new Enclosure(PentominoUtils.F);
+        Enclosure l = new Enclosure(PentominoUtils.L);
+        Enclosure n = new Enclosure(PentominoUtils.N);
+        Enclosure p = new Enclosure(PentominoUtils.P);
+        Enclosure y = new Enclosure(PentominoUtils.Y);
+        Enclosure t = new Enclosure(PentominoUtils.T);
+        Enclosure u = new Enclosure(PentominoUtils.U);
+        Enclosure v = new Enclosure(PentominoUtils.V);
+        Enclosure w = new Enclosure(PentominoUtils.W);
+        Enclosure z = new Enclosure(PentominoUtils.Z);
+        Enclosure i = new Enclosure(PentominoUtils.I);
+        Enclosure x = new Enclosure(PentominoUtils.X);
 
         assertEquals(8, f.generateAllVariants().size());
         assertEquals(8, l.generateAllVariants().size());
@@ -420,6 +424,32 @@ public class EnclosureTest {
 
         assertEquals(new Enclosure(expectedPaddedPiece), enclosure);
         assertEquals(6, enclosure.getLength());
+    }
+
+    @Test
+    public void testHash() {
+        Enclosure f1 = new Enclosure(PentominoUtils.F);
+        Enclosure f2 = new Enclosure(PentominoUtils.F);
+
+        assertEquals(f1.hashCode(), f2.hashCode());
+
+        f1.setName("foo");
+        f1.setName("bar");
+        assertNotEquals(f1.hashCode(), f2.hashCode());
+    }
+
+    @Test
+    public void testNamesAreKeptOnMutations() {
+        Enclosure f1 = new Enclosure(PentominoUtils.F);
+        f1.setName("foo");
+
+        f1.rotate();
+        assertEquals("foo", f1.getName());
+
+        f1.reflect();
+        assertEquals("foo", f1.getName());
+
+        assertEquals("foo", f1.clone().getName());
     }
 
     @Test

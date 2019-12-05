@@ -9,6 +9,8 @@ import java.util.*;
  * Generate a matrix that can be solved by dlx.
  */
 public class ExactCoverGenerator {
+    private Map<String, Integer> pieceMap;
+    private int uniquePieceCount;
     private List<Enclosure> pieces;
     private Enclosure board;
     private List<int[]> possibilities;
@@ -20,10 +22,23 @@ public class ExactCoverGenerator {
      * @param board
      */
     public ExactCoverGenerator(List<Enclosure> pieces, Enclosure board) {
-        this.pieces = pieces;
+        this.uniquePieceCount = pieces.size();
+        this.pieceMap = generatePieceMap(pieces);
+        this.pieces = generatePieceVariants(pieces);
         this.board = board;
         this.possibilities = new ArrayList<>();
         this.indexMap = buildCoordinateToIndexMap();
+    }
+
+    private List<Enclosure> generatePieceVariants(List<Enclosure> pieces) {
+        List<Enclosure> variants = new ArrayList<>();
+        for(Enclosure piece : pieces) {
+            for (Enclosure variant : piece.generateAllVariants()) {
+                variants.add(variant);
+            }
+        }
+
+        return variants;
     }
 
     private Map<Pair, Integer> buildCoordinateToIndexMap() {
@@ -37,34 +52,30 @@ public class ExactCoverGenerator {
                 }
             }
         }
+
         return map;
     }
+
+    private Map<String, Integer> generatePieceMap(List<Enclosure> pieces) {
+        Map<String, Integer> pieceMap = new HashMap<>();
+
+        Integer i = 0;
+        for(Enclosure piece : pieces) {
+            pieceMap.put(piece.getName(), i++);
+        }
+
+        return pieceMap;
+    }
+
 
     public Map<Pair, Integer> getIndexMap() {
         return this.indexMap;
     }
 
-
     public void generateMatrix() {
         for(Enclosure piece : pieces) {
             addPossibilities(piece);
         }
-    }
-
-    public void generateMatrixWithVariants() {
-        for(Enclosure piece : pieces) {
-            for(Enclosure variant : piece.generateAllVariants()) {
-                addPossibilities(variant);
-            }
-        }
-    }
-
-    public int[][] getMatrix() {
-        int[][] matrix = new int[possibilities.size()][pieces.size() + indexMap.size()];
-        for(int i = 0; i < possibilities.size(); i++) {
-            matrix[i] = possibilities.get(i);
-        }
-        return matrix;
     }
 
     /**
@@ -90,26 +101,27 @@ public class ExactCoverGenerator {
     }
 
     public int[] mapToCells(Enclosure piece, int startRow, int startCol) {
-        int[] rowPossibility = new int[pieces.size() + indexMap.size()];
+        int[] rowPossibility = new int[uniquePieceCount + indexMap.size()];
 
-        System.out.println(piece.getName());
         for(int row = 0; row < piece.getLength(); row++) {
             for(int col = 0; col < piece.getLength(); col++) {
                 if(piece.getEnclosureCell(row, col).value != Enclosure.OUTSIDE_CONSTANT) {
                     Pair key = new Pair(startRow + row, startCol + col);
-                    rowPossibility[indexMap.get(key)] = 1;
+                    rowPossibility[uniquePieceCount + indexMap.get(key)] = 1;
+                    rowPossibility[pieceMap.get(piece.getName())] = 1;
                 }
             }
         }
 
-        //System.out.println();
-        //for(int i : rowPossibility) {
-        //    System.out.print(i + " ");
-        //}
-        //System.out.println();
-        //System.out.println();
-
-
         return rowPossibility;
+    }
+
+    public int[][] getMatrix() {
+        int[][] matrix = new int[possibilities.size()][uniquePieceCount + indexMap.size()];
+        for(int i = 0; i < possibilities.size(); i++) {
+            matrix[i] = possibilities.get(i);
+        }
+
+        return matrix;
     }
 }

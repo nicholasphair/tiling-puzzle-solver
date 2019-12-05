@@ -2,7 +2,7 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.structures.Enclosure;
 import edu.uva.cs6161.structures.Pair;
-import edu.uva.cs6161.utils.PentominoArrays;
+import edu.uva.cs6161.utils.PentominoUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -47,41 +47,24 @@ public class ExactCoverGeneratorTest {
 
     }
 
-
     @Test
-    public void testGenerateMatrix() {
-        List<Enclosure> pentominos = PentominoArrays.ALL_PENTOMINOS
-                .stream()
-                .map(Enclosure::new)
-                .flatMap(x -> x.generateAllVariants().stream())
-                .collect(Collectors.toList());
-
-        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pentominos, KNUTH_BOARD_ENCLOSURE);
+    public void testGenerateMatrixWithVariants() {
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(PentominoUtils.ALL_PENTOMINO_ENCLOSURES, KNUTH_BOARD_ENCLOSURE);
         exactCoverGenerator.generateMatrix();
 
         // See page 3. https://arxiv.org/pdf/cs/0011047.pdf
-        assertEquals(1568, exactCoverGenerator.getMatrix().length);
-    }
-
-    @Test
-    public void testGenerateMatrixWithVariants() {
-        List<Enclosure> pentominos = PentominoArrays.ALL_PENTOMINOS
-                .stream()
-                .map(Enclosure::new)
-                .collect(Collectors.toList());
-
-        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pentominos, KNUTH_BOARD_ENCLOSURE);
-        exactCoverGenerator.generateMatrixWithVariants();
-
-        // See page 3. https://arxiv.org/pdf/cs/0011047.pdf
-        assertEquals(1568, exactCoverGenerator.getMatrix().length);
+        int[][] matrix = exactCoverGenerator.getMatrix();
+        assertEquals(1568, matrix.length);
+        for(int[] row : matrix) {
+            assertEquals(72, row.length);
+        }
     }
 
 
     @Test
     public void testIndexMapping() {
         List<Enclosure> enclosures = new ArrayList<>();
-        enclosures.add(new Enclosure(PentominoArrays.F));
+        enclosures.add(new Enclosure(PentominoUtils.F));
 
         ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(enclosures, KNUTH_BOARD_ENCLOSURE);
 
@@ -90,9 +73,11 @@ public class ExactCoverGeneratorTest {
         assertFalse(exactCoverGenerator.getIndexMap().containsKey(new Pair(3,4)));
         assertFalse(exactCoverGenerator.getIndexMap().containsKey(new Pair(4,3)));
         assertFalse(exactCoverGenerator.getIndexMap().containsKey(new Pair(4,4)));
+
         assertTrue(exactCoverGenerator.getIndexMap().containsKey(new Pair(0,0)));
         assertTrue(exactCoverGenerator.getIndexMap().containsKey(new Pair(0,7)));
         assertTrue(exactCoverGenerator.getIndexMap().containsKey(new Pair(7,0)));
         assertTrue(exactCoverGenerator.getIndexMap().containsKey(new Pair(7,7)));
     }
+
 }
