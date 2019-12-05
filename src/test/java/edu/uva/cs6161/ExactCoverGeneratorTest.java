@@ -6,8 +6,8 @@ import edu.uva.cs6161.utils.PentominoUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 public class ExactCoverGeneratorTest {
@@ -25,30 +25,97 @@ public class ExactCoverGeneratorTest {
     private static final Enclosure KNUTH_BOARD_ENCLOSURE = new Enclosure(KNUTH_BOARD);
 
     @Test
-    public void buildEnclosurePossibilitiesFromBoardTest() {
+    public void testGenerateMatrix1() {
+        char[][] boardArray = {
+                {'X', 'X'},
+                {'X', 'X'},
+        };
+
         char[][] piece = {
-                {'X', 'X'},
-                {'X', 'X'},
-        };
-
-        char[][] piece2 = {
                 {'X'},
                 {'X'},
         };
 
-        Enclosure enclosure = new Enclosure(piece2);
-        Enclosure board = new Enclosure(piece);
+        final int[][] expectedPossibilities = {
+                {1, 1, 0, 1, 0},
+                {1, 0, 1, 0, 1},
+                {1, 1, 1, 0, 0},
+                {1, 0, 0, 1, 1},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+        enclosure.setName("X");
+        Enclosure board = new Enclosure(boardArray);
 
         List<Enclosure> pieces = new ArrayList<>();
         pieces.add(enclosure);
         ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pieces, board);
 
         exactCoverGenerator.generateMatrix();
-
+        assertTrue(Arrays.deepEquals(expectedPossibilities, exactCoverGenerator.getMatrix()));
     }
 
     @Test
-    public void testGenerateMatrixWithVariants() {
+    public void testGenerateMatrix2() {
+        char[][] boardArray = {
+                {'X', 'X'},
+                {'X', 'X'},
+        };
+
+        char[][] piece = {
+                {'X'},
+        };
+
+        final int[][] expectedPossibilities = {
+                {1, 1, 0, 0, 0},
+                {1, 0, 1, 0, 0},
+                {1, 0, 0, 1, 0},
+                {1, 0, 0, 0, 1},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+        enclosure.setName("X");
+        Enclosure board = new Enclosure(boardArray);
+
+        List<Enclosure> pieces = new ArrayList<>();
+        pieces.add(enclosure);
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pieces, board);
+
+        exactCoverGenerator.generateMatrix();
+        assertTrue(Arrays.deepEquals(expectedPossibilities, exactCoverGenerator.getMatrix()));
+    }
+
+    @Test
+    public void testGenerateMatrixNoPossibilities() {
+        char[][] boardArray = {
+                {'X', 'X'},
+                {'X', 'X'},
+        };
+
+        char[][] piece = {
+                {'X', 'X', 'X'},
+        };
+
+        final int[][] expectedPossibilities = {
+                {1, 1, 0, 0, 0},
+                {1, 0, 1, 0, 0},
+                {1, 0, 0, 1, 0},
+                {1, 0, 0, 0, 1},
+        };
+
+        Enclosure enclosure = new Enclosure(piece);
+        Enclosure board = new Enclosure(boardArray);
+
+        List<Enclosure> pieces = new ArrayList<>();
+        pieces.add(enclosure);
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pieces, board);
+
+        exactCoverGenerator.generateMatrix();
+        assertEquals(0, exactCoverGenerator.getMatrix().length);
+    }
+
+    @Test
+    public void testGeneratedPentominoMatrixCounts() {
         ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(PentominoUtils.ALL_PENTOMINO_ENCLOSURES, KNUTH_BOARD_ENCLOSURE);
         exactCoverGenerator.generateMatrix();
 

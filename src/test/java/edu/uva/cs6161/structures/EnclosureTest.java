@@ -33,6 +33,27 @@ public class EnclosureTest {
         new Enclosure(piece);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellConstructorWithNullCharTiles() {
+        new Enclosure((char[][]) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellConstructorWithEmptyCharTiles() {
+        char[][] empty = {{}};
+        new Enclosure(empty);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellConstructorWithNullEnclosureCellTiles() {
+        new Enclosure((EnclosureCell[][]) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellConstructorWithEmptyEnclosureCellTiles() {
+        EnclosureCell[][] empty = {{}};
+        new Enclosure(empty);
+    }
 
     @Test
     public void testLengthIsLongestSide() {

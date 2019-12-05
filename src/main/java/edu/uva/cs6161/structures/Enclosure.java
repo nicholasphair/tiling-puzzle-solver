@@ -9,6 +9,8 @@ import java.util.function.Predicate;
 // TODO: write something to make sure pieces are oriented properly.
 public class Enclosure {
     public static final char OUTSIDE_CONSTANT = '_';
+    private static final char[][] EMPTY_TILES = {{}};
+    private static final EnclosureCell[][] EMPTY_ENCLOSURECELL_TILES = {{}};
 
     private EnclosureCell[][] cells;
     private EnclosureCell[][] truncatedCells;
@@ -20,6 +22,10 @@ public class Enclosure {
      * @param tiles
      */
     public Enclosure(char[][] tiles) {
+        if(!areValidTiles(tiles)) {
+            throw new IllegalArgumentException("Tiles cannot be null or empty.");
+        }
+
         this.length = Math.max(tiles.length, tiles[0].length);
         this.cells = new EnclosureCell[length][length];
         for(int row = 0; row < length; row++) {
@@ -38,14 +44,22 @@ public class Enclosure {
     }
 
     public Enclosure(EnclosureCell[][] tiles) {
-        if(tiles == null || tiles.length != tiles[0].length) {
-            throw new IllegalArgumentException("It is currently required that tiles be a square matrix.");
+        if(!areValidTiles(tiles)) {
+            throw new IllegalArgumentException("EnclosureCell tile cannot be null or empty or non-square.");
         }
 
         this.cells = tiles;
         this.length = tiles.length;
         this.truncatedCells = truncate();
         this.name = "";
+    }
+
+    private boolean areValidTiles(char[][] tiles) {
+        return !(tiles == null || Arrays.deepEquals(tiles, EMPTY_TILES));
+    }
+
+    private boolean areValidTiles(EnclosureCell[][] tiles) {
+        return !(tiles == null || Arrays.deepEquals(tiles, EMPTY_ENCLOSURECELL_TILES) || tiles.length != tiles[0].length);
     }
 
     public void setName(String name) {
