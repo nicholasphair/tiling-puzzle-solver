@@ -2,108 +2,95 @@ package edu.uva.cs6161.fileparser;// added by soneya
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class InputFileParser {
-    public static int array_length=0;
-    public static int array_width=0;
-    ArrayList<int [][] > tileList = new ArrayList<int [][] >();
-
-    char [][] getInputTilesArray() throws IOException {
-
-        String file_name="input1.txt";
-
-        File file = new File(file_name);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-
-        String lineFromInputFile;
+    private int array_length;
+    private int array_width;
+    private String filename;
 
 
-        while ((lineFromInputFile = br.readLine()) != null)
-        {
-           // System.out.println(lineFromInputFile);
-            array_length++;
-            if(array_width < lineFromInputFile.length())
-            {
-                array_width=lineFromInputFile.length();
+    public InputFileParser(String filename) {
+        this.filename = filename;
+        initializeLengthAndWidth();
+    }
+
+    private void initializeLengthAndWidth() {
+        this.array_length = 0;
+        this.array_width = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                this.array_length++;
+                this.array_width = Math.max(array_width, line.length());
             }
+        } catch(FileNotFoundException e) {
+            System.err.println("File not found.");
+        } catch(IOException e) {
+            System.err.println("Error while reading from file.");
         }
-        br.close();
+    }
 
-       // System.out.println("hereee"+array_length);
-       // System.out.println("hereee"+array_width);
+    private char[][] getInputPiecesArray() {
+        char[][] entireInputArray = new char[array_length][array_width];  // array declaration
+        InputFileParser.fillArray(entireInputArray);
 
-//--------------------------------------------------------------------------------dimension read done-------------
-
-        file = new File(file_name);
-        br = new BufferedReader(new FileReader(file));
-
-        char [][] entireInputArray= new char [array_length][array_width];  // array declaration
-
-        for (int row = 0; row < array_length; row ++)   // array initialization
-            for (int col = 0; col <array_width; col++)
-                entireInputArray[row][col] = '_';
-        //PrintInputArray(entireInputArray);
-//-----------------------------------------------------------------------------------------------------------------------
-
-        int count=0;
-
-        while ((lineFromInputFile = br.readLine()) != null)                      // reading from input text file and populating char array
-        {
-            for ( int i=0; i < lineFromInputFile.length();i++)
-            {
-                if (lineFromInputFile.charAt(i) == ' ')
-                    entireInputArray[count][i]='_';
-                else  entireInputArray[count][i]=lineFromInputFile.charAt(i);
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filename))) {
+            int count = 0;
+            String line;
+            while((line = br.readLine()) != null) {
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) == ' ') {
+                        entireInputArray[count][i] = '_';
+                    } else {
+                        entireInputArray[count][i] = line.charAt(i);
+                    }
+                }
+                count++;
             }
-            count++;
+        } catch(FileNotFoundException e) {
+            System.err.println("File not found.");
+        } catch(IOException e) {
+            System.err.println("Error while reading from file.");
         }
         return entireInputArray;
     }
 
-
-    public static void main(String args[]) throws IOException {
-
-
-        InputFileParser newparser = new InputFileParser();
-        ArrayList< char[][]>  allTiles = newparser.getInputTiles();
-
-       // for (int counter = 0; counter < allTiles.size(); counter++) {
-        //    char[][] tile = allTiles.get(counter);
-       // }
-    }
-
-    public ArrayList< char[][]>  getInputTiles() throws IOException {
+    public ArrayList< char[][]> getInputPieces() {
 
 
-        ArrayList< char[][]> all_tiles = new  ArrayList< char[][]>();
+        ArrayList< char[][]> all_pieces = new  ArrayList< char[][]>();
 
-        InputFileParser new_parser = new InputFileParser();
+        InputFileParser new_parser = new InputFileParser(this.filename);
 
-        char[][] tilesArray = new_parser.getInputTilesArray();
-        char[][] tilesArray_copy= new char [array_length][array_width];  // making a copy so that actual array remains unchanged
+        char[][] piecesArray = new_parser.getInputPiecesArray();
+        char[][] piecesArray_copy= new char [array_length][array_width];  // making a copy so that actual array remains unchanged
 
         for (int row = 0; row < array_length; row ++) {
             for (int col = 0; col < array_width; col++) {
-                tilesArray_copy[row][col]= tilesArray[row][col];
+                char piece = piecesArray[row][col];
+                piecesArray_copy[row][col] = piece;
             }
         }
 
-        //new_parser.PrintInputArray(tilesArray_copy);
+        //new_parser.PrintInputArray(piecesArray_copy);
         //System.out.println("hereee"+array_length);
         //System.out.println("hereee"+array_widt
 
-        int totalNoOfTiles=0;
+        int totalNoOfPieces=0;
 
         for (int row = 0; row < new_parser.array_length; row ++)
         {
 
             for (int col = 0; col < new_parser.array_width; col++) {
-               if(tilesArray_copy[row][col] != '_' && tilesArray_copy[row][col-1] == '_')
+               if(piecesArray_copy[row][col] != '_' && piecesArray_copy[row][col-1] == '_')
                {
 
-                   System.out.println(".............................................");
+                   //System.out.println(".............................................");
 
                    ArrayList<String> arrayIndices = new   ArrayList<String> ();
-                   new_parser.depthFirstTraversal(tilesArray_copy,row, col, arrayIndices);
+                   new_parser.depthFirstTraversal(piecesArray_copy,row, col, arrayIndices);
 
                    // now process the indices and add it into an array list of 2d array
 
@@ -135,7 +122,7 @@ public class InputFileParser {
                  //  System.out.println("For Loop: got low and high value :"+ row_l+","+ row_h+","+ col_l+","+col_h);
 
 
-                   char [][] tile = new char [row_h-row_l+1][col_h-col_l+1];
+                   char [][] piece = new char [row_h-row_l+1][col_h-col_l+1];
 
                    //System.out.println( row_h-row_l+1);
                    //System.out.println(col_h-col_l+1);
@@ -148,47 +135,28 @@ public class InputFileParser {
 
                            //System.out.print(row1+row_l);
                            //System.out.print(col1+col_l);
-                           //System.out.println(tilesArray[row1+row_l][col1+col_l]);
+                           //System.out.println(piecesArray[row1+row_l][col1+col_l]);
 
-                           tile[row1][col1]=tilesArray[row1+row_l][col1+col_l];
+                           piece[row1][col1]=piecesArray[row1+row_l][col1+col_l];
                        }
                    }
 
-                   all_tiles.add(tile);
+                   all_pieces.add(piece);
 
-                   new_parser.PrintInputArray(tile,row_h-row_l+1,col_h-col_l+1);
+                   //new_parser.PrintInputArray(piece,row_h-row_l+1,col_h-col_l+1);
                    //System.out.println(".............................................");
-                   totalNoOfTiles++;
+                   totalNoOfPieces++;
                }
             }
-            //new_parser.PrintInputArray(tilesArray_copy);
+            //new_parser.PrintInputArray(piecesArray_copy);
         }
-        //new_parser.PrintInputArray(tilesArray);
-        System.out.println("Total Tiles ==== " +totalNoOfTiles);
-        return all_tiles;
+        //new_parser.PrintInputArray(piecesArray);
+        //System.out.println("Total Pieces ==== " +totalNoOfPieces);
+        return all_pieces;
 
     }
-    void PrintInputArray(char [][] entireInputArray , int row1, int col1)
-    {
-        for (int row = 0; row < row1; row ++) {  // array initialization
-            for (int col = 0; col < col1; col++) {
-                System.out.print(entireInputArray[row][col]);
-            }
-            System.out.println();
-        }
-    }
-    void PrintInputArray(char [][] entireInputArray)
-    {
-        for (int row = 0; row < array_length; row ++) {  // array initialization
-            for (int col = 0; col < array_width; col++) {
-                System.out.print(entireInputArray[row][col]);
-            }
-            System.out.println();
-        }
-    }
 
-
-    boolean depthFirstTraversal( char[][] tilesArray, int row, int column, ArrayList<String> arrayIndices)
+    private boolean depthFirstTraversal(char[][] piecesArray, int row, int column, ArrayList<String> arrayIndices)
     {
 
         if(row==array_length ) return false;
@@ -198,27 +166,74 @@ public class InputFileParser {
 
         //System.out.println(row +","+ column);
         arrayIndices.add(row +","+ column);
-        tilesArray[row][column]='_';
+        piecesArray[row][column]='_';
 
-        if( row-1 >= 0 && tilesArray[row-1][column]!='_')
+        if( row-1 >= 0 && piecesArray[row-1][column]!='_')
         {
-            depthFirstTraversal(tilesArray, row-1, column,arrayIndices);
+            depthFirstTraversal(piecesArray, row-1, column,arrayIndices);
         }
 
-        if( column-1 >= 0 && tilesArray[row][column-1]!='_')
+        if( column-1 >= 0 && piecesArray[row][column-1]!='_')
         {
-            depthFirstTraversal(tilesArray, row, column-1,arrayIndices);
+            depthFirstTraversal(piecesArray, row, column-1,arrayIndices);
         }
 
-        if( column+1 < array_width && tilesArray[row][column+1]!='_')
+        if( column+1 < array_width && piecesArray[row][column+1]!='_')
         {
-            depthFirstTraversal(tilesArray, row, column+1,arrayIndices);
+            depthFirstTraversal(piecesArray, row, column+1,arrayIndices);
         }
 
-        if(row+1 < array_length &&   tilesArray[row+1][column]!='_')
+        if(row+1 < array_length &&   piecesArray[row+1][column]!='_')
         {
-            depthFirstTraversal(tilesArray, row+1, column,arrayIndices);
+            depthFirstTraversal(piecesArray, row+1, column,arrayIndices);
         }
         return true;
+    }
+
+    public static void printArray(char[][] array) {
+        for(char[] r : array) {
+            for(char c : r) {
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+    }
+
+    private static void fillArray(char[][] array) {
+        for(int i = 0; i < array.length; i++) {
+            for(int j = 0; j < array[0].length; j++) {
+                array[i][j] = '_';
+            }
+        }
+    }
+
+    /**
+     * The index of the largest piece where largest means having the most non underscore cells.
+     * @param pieces
+     * @return
+     */
+    public static int identifyLargest(List<char[][]> pieces) {
+        Integer maxCount = Integer.MIN_VALUE;
+        int maxIndex = 0;
+
+        for(int i = 0; i < pieces.size(); i++) {
+            int count = countValidCells(pieces.get(i));
+            if(count > maxCount) {
+                maxCount = count;
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
+    }
+
+    private static int countValidCells(char[][] piece) {
+        int total = 0;
+        for(char[] r : piece) {
+            for(char c : r) {
+                total += c == '_' ? 0 : 1;
+            }
+        }
+        return total;
     }
 }
