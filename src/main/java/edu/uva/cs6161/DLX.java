@@ -67,7 +67,6 @@ public class DLX {
             // set Ok ← r;
             solutions.add(k, r);
 
-
             // for each j ← R[r], R[R[r]]/, ... , while j =/= r,
             DataObject j = r;
             while((j = j.getR()) != r) {

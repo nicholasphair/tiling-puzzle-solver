@@ -21,9 +21,6 @@ public class InputFileParserTest {
         inputFileParser = new InputFileParser(pentominos);
 
         assertEquals(13, inputFileParser.getInputPieces().size());
-
-
-
     }
 
     @Test

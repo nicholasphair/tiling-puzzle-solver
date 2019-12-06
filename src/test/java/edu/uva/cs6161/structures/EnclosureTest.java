@@ -460,6 +460,23 @@ public class EnclosureTest {
     }
 
     @Test
+    public void testHash2() {
+        char[][] piece = {
+                {'X', 'O'},
+                {'X', 'O'},
+        };
+
+        char[][] piece2 = {
+                {'X', 'O'},
+                {'X', 'O'},
+        };
+        Enclosure f1 = new Enclosure(piece);
+        Enclosure f2 = new Enclosure(piece2);
+
+        assertNotEquals(f1.hashCode(), f2.hashCode());
+    }
+
+    @Test
     public void testNamesAreKeptOnMutations() {
         Enclosure f1 = new Enclosure(PentominoUtils.F);
         f1.setName("foo");

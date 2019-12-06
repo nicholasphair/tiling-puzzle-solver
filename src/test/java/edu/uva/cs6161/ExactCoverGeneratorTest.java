@@ -55,6 +55,7 @@ public class ExactCoverGeneratorTest {
         assertTrue(Arrays.deepEquals(expectedPossibilities, exactCoverGenerator.getMatrix()));
     }
 
+    // PENTOMINO WITH 1 in first
     @Test
     public void testGenerateMatrix2() {
         char[][] boardArray = {

@@ -13,10 +13,11 @@ public class EnclosureCell {
         this.inside = inside;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(value, inside);
-    }
+    // NOTE (nphair) - Not overriding this hash until I figure out a better way to hash Enclosures themselves.
+    //@Override
+    //public int hashCode() {
+    //    return Objects.hash(value, inside);
+    //}
 
     @Override
     public boolean equals(Object obj) {

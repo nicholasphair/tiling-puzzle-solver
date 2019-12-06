@@ -17,6 +17,16 @@ public class Enclosure {
     private String name;
     private int length;
 
+    public Enclosure(char[][] tiles, String name) {
+        this(tiles);
+        this.name = name;
+    }
+
+    public Enclosure(EnclosureCell[][] tiles, String name) {
+        this(tiles);
+        this.name = name;
+    }
+
     /**
      * Build an Enclosure object from a 2D char array.
      * @param tiles
