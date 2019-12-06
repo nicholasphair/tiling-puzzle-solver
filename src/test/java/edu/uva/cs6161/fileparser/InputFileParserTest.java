@@ -16,6 +16,14 @@ public class InputFileParserTest {
         InputFileParser inputFileParser = new InputFileParser(filename);
 
         assertEquals(13, inputFileParser.getInputPieces().size());
+
+        String pentominos = Resources.getResource("pentominoes3x20").getPath();
+        inputFileParser = new InputFileParser(pentominos);
+
+        assertEquals(13, inputFileParser.getInputPieces().size());
+
+
+
     }
 
     @Test
