@@ -11,7 +11,7 @@ import java.util.*;
 public class ExactCoverGenerator {
     private Map<String, Integer> pieceMap;
     private int uniquePieceCount;
-    private List<Enclosure> pieces;
+    public List<Enclosure> pieces;
     private Enclosure board;
     private List<int[]> possibilities;
     private Map<Pair, Integer> indexMap;

@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 public class ExactCoverGeneratorTest {
-    private static final char[][] KNUTH_BOARD = {
+    private static final char[][] PENTOMINO_BOARD = {
             {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
             {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
             {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
@@ -22,7 +22,7 @@ public class ExactCoverGeneratorTest {
             {'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'},
     };
 
-    private static final Enclosure KNUTH_BOARD_ENCLOSURE = new Enclosure(KNUTH_BOARD);
+    private static final Enclosure PENTOMINO_BOARD_ENCLOSURE = new Enclosure(PENTOMINO_BOARD);
 
     @Test
     public void testGenerateMatrix1() {
@@ -117,7 +117,7 @@ public class ExactCoverGeneratorTest {
 
     @Test
     public void testGeneratedPentominoMatrixCounts() {
-        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(PentominoUtils.ALL_PENTOMINO_ENCLOSURES, KNUTH_BOARD_ENCLOSURE);
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(PentominoUtils.ALL_PENTOMINO_ENCLOSURES, PENTOMINO_BOARD_ENCLOSURE);
         exactCoverGenerator.generateMatrix();
 
         // See page 3. https://arxiv.org/pdf/cs/0011047.pdf
@@ -126,15 +126,20 @@ public class ExactCoverGeneratorTest {
         for(int[] row : matrix) {
             assertEquals(72, row.length);
         }
-    }
 
+        // Test there is at least a one in every column.
+        for(int i = 0; i < matrix[0].length; i++) {
+            final int index = i;
+            assertNotEquals(0, Arrays.stream(matrix).map(x -> x[index]).filter(x -> x == 1).count());
+        }
+    }
 
     @Test
     public void testIndexMapping() {
         List<Enclosure> enclosures = new ArrayList<>();
         enclosures.add(new Enclosure(PentominoUtils.F));
 
-        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(enclosures, KNUTH_BOARD_ENCLOSURE);
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(enclosures, PENTOMINO_BOARD_ENCLOSURE);
 
         assertEquals(60, exactCoverGenerator.getIndexMap().size());
         assertFalse(exactCoverGenerator.getIndexMap().containsKey(new Pair(3,3)));

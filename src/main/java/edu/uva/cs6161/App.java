@@ -2,7 +2,10 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.fileparser.InputFileParser;
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
+import edu.uva.cs6161.handlers.SolutionsHandler;
+import edu.uva.cs6161.handlers.StdoutSolutionsHandler;
 import edu.uva.cs6161.structures.Enclosure;
+import edu.uva.cs6161.structures.QuadLinkedList;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,39 +16,29 @@ import java.util.stream.Collectors;
  *
  */
 public class App {
-    public static void main(String[] args ) {
-        String filename = "/opt/devel/tiling-puzzle-solver/target/test-classes/checkerboard";
 
+
+    public List<String> run(String filename) {
         InputFileParser inputFileParser = new InputFileParser(filename);
+        List<char[][]> piecesAndBoard= inputFileParser.getInputPieces();
+        int largestIndex = InputFileParser.identifyLargest(piecesAndBoard);
 
-
-        List<char[][]> pieces = inputFileParser.getInputPieces();
-
-        int largestIndex = InputFileParser.identifyLargest(pieces);
-        Enclosure board = new Enclosure(pieces.remove(largestIndex));
-
-        List<Enclosure> ps = pieces.stream().map(Enclosure::new).collect(Collectors.toList());
-        //System.out.println(ps.stream().mapToInt(Enclosure::hashCode).distinct().count());
-        //System.out.println(ps.stream().distinct().count());
+        Enclosure board = new Enclosure(piecesAndBoard.remove(largestIndex));
+        List<Enclosure> pieces = piecesAndBoard.stream().map(Enclosure::new).collect(Collectors.toList());
 
         for(int i = 0; i < pieces.size(); i++) {
-            ps.get(i).setName(Integer.toString(i));
-            Enclosure e = ps.get(i);
-            //System.out.println(e.hashCode());
-            e.printCells();
-            System.out.println();
+            Enclosure e = pieces.get(i);
+            e.setName(Integer.toString(i));
         }
 
-        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(ps, board);
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(pieces, board);
 
         exactCoverGenerator.generateMatrix();
         int[][] matrix = exactCoverGenerator.getMatrix();
-        //kSystem.out.println(Arrays.stream(matrix).map(x -> x[0]).filter(x -> x == 1).count());
 
         CollectSolutionsHandler collector = new CollectSolutionsHandler();
-        DLX dlx = new DLX(false, collector);
+        DLX dlx = new DLX(true, collector);
         dlx.search(matrix);
-        System.out.println("Number of solutions to the pentomino problem: ");
-        System.out.println(collector.collect().size());
+        return collector.collect();
     }
 }

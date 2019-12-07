@@ -32,6 +32,11 @@ public class QuadLinkedListTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testNameConstructorWithNullArgument() {
+        new QuadLinkedList(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithEmptyArgument() {
         new QuadLinkedList(new int[0][0]);
     }
@@ -110,5 +115,12 @@ public class QuadLinkedListTest {
         DataObject secondRow = quadLinkedList.getRoot().getR().getD();
         assertNotEquals(secondRow, secondRow.getR());
         assertEquals(secondRow, secondRow.getR().getR());
+    }
+
+    @Test
+    public void testIsEmpty() {
+        int[][] matrix = {{}};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(matrix);
+        assertTrue(quadLinkedList.isEmpty());
     }
 }
