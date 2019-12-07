@@ -2,12 +2,9 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.fileparser.InputFileParser;
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
-import edu.uva.cs6161.handlers.SolutionsHandler;
-import edu.uva.cs6161.handlers.StdoutSolutionsHandler;
 import edu.uva.cs6161.structures.Enclosure;
 import edu.uva.cs6161.structures.QuadLinkedList;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +14,7 @@ import java.util.stream.Collectors;
  */
 public class App {
 
-
-    public List<String> run(String filename) {
+    public List<String> run(String filename, boolean optional) {
         InputFileParser inputFileParser = new InputFileParser(filename);
         List<char[][]> piecesAndBoard= inputFileParser.getInputPieces();
         int largestIndex = InputFileParser.identifyLargest(piecesAndBoard);
@@ -37,8 +33,12 @@ public class App {
         int[][] matrix = exactCoverGenerator.getMatrix();
 
         CollectSolutionsHandler collector = new CollectSolutionsHandler();
+        QuadLinkedList quadLinkedList = new QuadLinkedList(matrix);
+        if(optional) {
+            quadLinkedList.setOptionalColumns(matrix[0].length - pieces.size(), pieces.size());
+        }
         DLX dlx = new DLX(true, collector);
-        dlx.search(matrix);
+        dlx.search(quadLinkedList);
         return collector.collect();
     }
 }

@@ -3,6 +3,7 @@ package edu.uva.cs6161.structures;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuadLinkedList {
     private ColumnObject root;
@@ -146,4 +147,33 @@ public class QuadLinkedList {
     public boolean isEmpty() {
         return root.getR() == root;
     }
+
+
+    public void setOptionalColumns(int optional, int mandatory) {
+        if(mandatory < 0 || optional < 1 || root == null) {
+            throw new IllegalArgumentException("Cannot set optional columns");
+        }
+
+        int total = mandatory + optional;
+        DataObject columns[] = new DataObject[total];
+
+        int count = 0;
+        DataObject current = root;
+        while((current = current.getR()) != root) {
+            if(count++ > total) {
+                throw new IllegalArgumentException("Cannot set optional columns");
+            }
+        }
+
+        if (mandatory > 0) {
+            columns[mandatory - 1].setL(root);
+            root.setR(columns[mandatory - 1]);
+        }
+
+        for (int i = 0; i < mandatory; i++) {
+            columns[i].setL(columns[i]);
+            columns[i].setR(columns[i]);
+        }
+    }
+
 }
