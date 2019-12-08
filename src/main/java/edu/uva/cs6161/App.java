@@ -2,14 +2,14 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.fileparser.InputFileParser;
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
-import edu.uva.cs6161.handlers.SolutionsHandler;
 import edu.uva.cs6161.structures.Enclosure;
 import edu.uva.cs6161.structures.EnclosureCell;
 import edu.uva.cs6161.structures.Pair;
 import edu.uva.cs6161.structures.QuadLinkedList;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class App {

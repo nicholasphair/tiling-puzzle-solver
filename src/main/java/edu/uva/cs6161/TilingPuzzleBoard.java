@@ -8,8 +8,6 @@ import java.util.Random;
 import javax.swing.*;
 
 public class TilingPuzzleBoard extends JPanel {
-
-    private int size;
     private Random rand;
     private Map<String, Color> colorMap;
     String[][] board;
@@ -19,7 +17,6 @@ public class TilingPuzzleBoard extends JPanel {
         this.rand = new Random();
         this.colorMap = new HashMap<>();
         colorMap.put("_", Color.BLACK);
-        this.size = size;
         this.board = null;
     }
 

@@ -55,9 +55,6 @@ public class AppTest {
         System.out.println(solutions.size());
     }
 
-    /**
-     * Can't be parsed...
-     */
     @Ignore
     @Test
     public void testInputFileIQ_creator() {
@@ -70,9 +67,6 @@ public class AppTest {
         System.out.println(solutions.size());
     }
 
-    /**
-     * Can't be parsed...
-     */
     @Ignore
     @Test
     public void testInputFileLucky13() {
