@@ -11,6 +11,7 @@ import java.util.List;
         private List<String[][]> outputList;
         private int counter = 0;
         private App app;
+        private static ImageIcon SPINNER = new ImageIcon("src/main/resources/ajax-loader.gif");
 
 
         public TilingPuzzleSolver() {
@@ -22,6 +23,8 @@ import java.util.List;
             frame.setVisible(true);
             frame.setTitle("Tiling Puzzle Solver");
             frame.setBackground(Color.gray);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
             btnPanel = new JPanel();
 
@@ -54,20 +57,62 @@ import java.util.List;
             });
 
             slnButton.addActionListener(arg0 -> {
-                if(fileName.trim().length() != 0) {
-                    outputList = app.run(fileName, false);
+                if(fileName != null && fileName.trim().length() != 0) {
+                    SwingWorker worker = new SwingWorker<List<String[][]>, Void>() {
+                        Component component;
+                        @Override
+                        public List<String[][]> doInBackground() {
+                            tilingPuzzleBoard.invalidate();
+                            tilingPuzzleBoard.removeAll();
+                            JLabel label = new JLabel("finding solutions... ", SPINNER, JLabel.CENTER);
+                            component = tilingPuzzleBoard.add(label);
+                            tilingPuzzleBoard.repaint();
+                            tilingPuzzleBoard.setVisible(true);
+                            tilingPuzzleBoard.validate();
+
+                            nextSlnButton.setEnabled(false);
+                            openBtn.setEnabled(false);
+                            return app.run(fileName, false);
+                        }
+
+                        @Override
+                        protected void done() {
+                            nextSlnButton.setEnabled(true);
+                            openBtn.setEnabled(true);
+                            tilingPuzzleBoard.invalidate();
+                            tilingPuzzleBoard.removeAll();
+
+                            try{
+                                outputList = get();
+                            } catch(Exception e) {
+                                outputList = null;
+                                JLabel label = new JLabel("Something went wrong. Try a different file.");
+                                component = tilingPuzzleBoard.add(label);
+                            }
+                            tilingPuzzleBoard.repaint();
+                            tilingPuzzleBoard.setVisible(true);
+                            tilingPuzzleBoard.validate();
+                        }
+                    };
+                    worker.execute();
                 }
-                tilingPuzzleBoard.removeAll();
-                tilingPuzzleBoard.revalidate();
-                tilingPuzzleBoard.repaint();
-                tilingPuzzleBoard.setVisible(true);
             });
 
             nextSlnButton.addActionListener(arg0 -> {
-                tilingPuzzleBoard.paintBoard(outputList.get(counter));
+                if(fileName == null || outputList == null) {
+                    return;
+                }
+
+                if(!outputList.isEmpty()) {
+                    tilingPuzzleBoard.paintBoard(outputList.get(counter));
+                    counter = ++counter % outputList.size();
+                } else {
+                    tilingPuzzleBoard.removeAll();
+                    tilingPuzzleBoard.add(new JLabel("no solutions found", JLabel.CENTER));
+                }
+
                 tilingPuzzleBoard.revalidate();
                 tilingPuzzleBoard.repaint();
-                counter = ++counter % outputList.size();
             });
         }
 

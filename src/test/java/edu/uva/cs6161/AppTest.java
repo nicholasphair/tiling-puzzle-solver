@@ -50,8 +50,7 @@ public class AppTest {
         List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        //System.out.println(solutions.get(0));
-        //System.out.println(solutions.size());
+        System.out.println(solutions.size());
     }
 
     /**
