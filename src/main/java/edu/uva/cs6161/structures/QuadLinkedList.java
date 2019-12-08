@@ -1,8 +1,7 @@
 package edu.uva.cs6161.structures;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class QuadLinkedList {
@@ -102,6 +101,52 @@ public class QuadLinkedList {
         }
     }
 
+    public List<Map<String, int[]>> solutionToIndices(String solution) {
+        return Arrays.stream(solution.split("\n"))
+                .map(this::solutionRowToIndices)
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, int[]> solutionRowToIndices(String solution) {
+        String[] names = solution.split(" ");
+        //return Arrays.stream(names).mapToInt(this::nameToColumnIndex).toArray();
+
+        int[] solutionRow = new int[matrix[0].length];
+        Arrays.stream(names).mapToInt(this::nameToColumnIndex).forEach(x -> solutionRow[x] = 1);
+        //return solutionRow;
+
+
+
+        Map<String, int[]> foo = new HashMap<>();
+
+        foo.put(getNameOfFirstSetColumn(solutionRow), Arrays.copyOfRange(solutionRow, 1, solution.length()-1));
+        return foo;
+    }
+
+    public String getNameOfFirstSetColumn(int[] row) {
+        int nameIndex = 0;
+        while (row[nameIndex++] != 1) ;
+
+        ColumnObject object = root;
+        for (int i = 0; i < nameIndex; i++) {
+            object = (ColumnObject) object.getR();
+        }
+        return object.getName();
+    }
+
+    public int nameToColumnIndex(String name) {
+        ColumnObject current = root;
+        int i = 0;
+        while((current = (ColumnObject) current.getR()) != root) {
+            if(current.getName().equals(name)) {
+                return i;
+            }
+            i++;
+        }
+        throw new IllegalArgumentException("Name not in QuadLinkedList");
+    }
+
+
     /**
      * Updates pointer to add a DataObject to the column defined by head.
      * @param head
@@ -175,5 +220,4 @@ public class QuadLinkedList {
             columns[i].setR(columns[i]);
         }
     }
-
 }

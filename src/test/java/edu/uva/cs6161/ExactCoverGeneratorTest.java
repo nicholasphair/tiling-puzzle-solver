@@ -153,4 +153,19 @@ public class ExactCoverGeneratorTest {
         assertTrue(exactCoverGenerator.getIndexMap().containsKey(new Pair(7,7)));
     }
 
+    @Test
+    public void testIndexToCoordinate() {
+        List<Enclosure> enclosures = new ArrayList<>();
+        enclosures.add(new Enclosure(PentominoUtils.F));
+
+        ExactCoverGenerator exactCoverGenerator = new ExactCoverGenerator(enclosures, PENTOMINO_BOARD_ENCLOSURE);
+
+        Pair beforeHolePair = exactCoverGenerator.indexToCoordinate(26);
+        assertEquals(3, beforeHolePair.x);
+        assertEquals(2, beforeHolePair.y);
+
+        Pair afterHolePair = exactCoverGenerator.indexToCoordinate(27);
+        assertEquals(3, afterHolePair.x);
+        assertEquals(5, afterHolePair.y);
+    }
 }

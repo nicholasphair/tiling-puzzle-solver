@@ -124,4 +124,20 @@ public class ExactCoverGenerator {
 
         return matrix;
     }
+
+
+    /**
+     * Given an index into the board, return the corresponding x,y Pair.
+     * @param index
+     * @return
+     */
+    public Pair indexToCoordinate(Integer index) {
+        for (Map.Entry<Pair, Integer> entry : indexMap.entrySet()) {
+            if(entry.getValue() == index) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
 }

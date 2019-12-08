@@ -123,4 +123,64 @@ public class QuadLinkedListTest {
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix);
         assertTrue(quadLinkedList.isEmpty());
     }
+
+    @Test
+    public void testNameToColumnIndex() {
+        String[] names = {"A", "B", "C", "D", "E"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][5], names);
+
+
+        assertEquals(0, quadLinkedList.nameToColumnIndex("A"));
+        assertEquals(1, quadLinkedList.nameToColumnIndex("B"));
+        assertEquals(2, quadLinkedList.nameToColumnIndex("C"));
+        assertEquals(3, quadLinkedList.nameToColumnIndex("D"));
+        assertEquals(4, quadLinkedList.nameToColumnIndex("E"));
+    }
+
+
+    @Test
+    public void part1() {
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNameToColumnIndexThrowsExceptionOnBadName() {
+        String[] names = {"A", "B", "C", "D", "E"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][5], names);
+
+
+        assertEquals(0, quadLinkedList.nameToColumnIndex("foobar"));
+    }
+
+    @Test
+    public void testGetNameOfFirstSetColumn() {
+        String[] names = {"A", "B", "C", "D", "E"};
+        QuadLinkedList quadLinkedList = new QuadLinkedList(new int[1][5], names);
+
+        int[] nameIsB = {0, 1, 1, 1, 1};
+        assertEquals("B", quadLinkedList.getNameOfFirstSetColumn(nameIsB));
+
+        int[] nameIsD = {0, 0, 0, 1, 0};
+        assertEquals("D", quadLinkedList.getNameOfFirstSetColumn(nameIsD));
+    }
+
+    @Test
+    public void solutionRowToCoordinates() {
+        int[][] matrix = {
+                {1, 0, 0, 1},
+                {0, 1, 1, 0}
+        };
+        String[] colNames = {"PieceA", "PieceB", "X", "Y"};
+
+        QuadLinkedList quadLinkedList = new QuadLinkedList(matrix, colNames);
+
+        int[] expectedCoordinates = {0, 3};
+        //int[] actualCoordinates = quadLinkedList.solutionRowToIndices("PieceA Y");
+        //assertArrayEquals(expectedCoordinates, actualCoordinates);
+
+        int[] expectedCoordinates2 = {1, 2};
+        //int[] actualCoordinates2 = quadLinkedList.solutionRowToIndices("PieceB X");
+        //assertArrayEquals(expectedCoordinates2, actualCoordinates2);
+    }
 }
