@@ -1,74 +1,50 @@
 package edu.uva.cs6161;
 
+
 import java.awt.*;
-import javax.swing.JPanel;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import javax.swing.*;
+
 public class TilingPuzzleBoard extends JPanel {
+
     private int size;
-    int color=0;
-    char [][] board;
+    private Random rand;
+    private Map<String, Color> colorMap;
+    String[][] board;
 
     public TilingPuzzleBoard(int size) {
         this.setPreferredSize(new Dimension(size, size));
+        this.rand = new Random();
+        this.colorMap = new HashMap<>();
+        colorMap.put("_", Color.BLACK);
         this.size = size;
-
+        this.board = null;
     }
 
-    public void setArray(int color, char [][] brd)
-    {
-        this.board=brd;
-        this.color=color;
-        System.out.println("setting board ");
-
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        // draw the board here.................
-        int tileSize = size / 30;
-        //Fill black.
-        g.setColor(Color.gray);
-        g.fillRect(0, 0, getWidth(), getHeight());
-
-        // Color red tiles.
-        if(color==9) g.setColor(Color.cyan);
-        else g.setColor(Color.red);
-        for (int i = 3; i < 20; i++) {
-            for (int j = 3; j < 20; j++) {
-
-
-                if(board[i-3][j-3]=='R')
-                {
-
-                    g.setColor(Color.RED);
-                    g.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-
-                }
-                if(board[i-3][j-3]=='Y')
-                {
-                    g.setColor(Color.YELLOW);
-                    g.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-
-                }
-
-                if(board[i-3][j-3]=='G')
-                {
-
-                    g.setColor(Color.GREEN);
-                    g.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-
-                }
-                if(board[i-3][j-3]=='X')
-                {
-
-
-                }
-
+    public void paintBoard(String[][] board) {
+        this.removeAll();
+        this.setLayout(new GridLayout(board.length, board[0].length));
+        for(String[] row: board) {
+            for(String column: row) {
+                addColoredPanel(column);
             }
         }
+    }
 
+    private void addColoredPanel(String column) {
+        Color color = colorMap.computeIfAbsent(column, __ -> randomColor());
+        JPanel panel = new JPanel();
+        panel.setBackground(color);
+        panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.add(panel);
+    }
 
-
+    private Color randomColor() {
+        int r = rand.nextInt(255);
+        int g = rand.nextInt(255);
+        int b = rand.nextInt(255);
+        return new Color(r, g, b);
     }
 }
