@@ -14,7 +14,7 @@ Puzzles are solved by expressing them as exact cover problems. From there, we us
 Donald Knuth's Algorithm X with dancing links (DLX), to solve the exact cover problem.
 
 # demo
-![demo](/docs/pentominoes_8x8_missing_middle.gif)
+![demo](/demo/pentominoes_8x8_missing_middle.gif)
 
 # building
 You can build the project with maven:
