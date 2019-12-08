@@ -104,11 +104,12 @@ public class DLX {
         ColumnObject c = (ColumnObject) root.getR();
 
         if(minimizeBranchingFactor) {
+            int s = Integer.MAX_VALUE;
             ColumnObject j = root;
             while((j = (ColumnObject) j.getR()) != root) {
-                if(j.getSize() < Integer.MAX_VALUE) {
+                if(j.getSize() < s) {
                     c = j;
-                    c.setSize(j.getSize());
+                    s = j.getSize();
                 }
 
             }
