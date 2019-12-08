@@ -1,3 +1,5 @@
+package edu.uva.cs6161;
+
 import java.awt.*;
 import javax.swing.JPanel;
 public class TilingPuzzleBoard extends JPanel {
