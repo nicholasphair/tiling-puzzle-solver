@@ -87,7 +87,8 @@ public class App {
         CollectSolutionsHandler collector = new CollectSolutionsHandler();
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix);
         if(optional) {
-            quadLinkedList.setOptionalColumns(matrix[0].length - pieces.size(), pieces.size());
+            //quadLinkedList.setOptionalColumns(matrix[0].length - pieces.size(), pieces.size());
+            quadLinkedList.setOptionalColumns(pieces.size(), matrix[0].length - pieces.size());
         }
 
         DLX dlx = new DLX(true, collector);
