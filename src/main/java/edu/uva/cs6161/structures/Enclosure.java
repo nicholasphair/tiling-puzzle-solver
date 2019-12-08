@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-// TODO: write something to make sure pieces are oriented properly.
 public class Enclosure {
     public static final char OUTSIDE_CONSTANT = '_';
     private static final char[][] EMPTY_TILES = {{}};

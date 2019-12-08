@@ -2,19 +2,69 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.fileparser.InputFileParser;
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
+import edu.uva.cs6161.handlers.SolutionsHandler;
 import edu.uva.cs6161.structures.Enclosure;
 import edu.uva.cs6161.structures.EnclosureCell;
 import edu.uva.cs6161.structures.Pair;
 import edu.uva.cs6161.structures.QuadLinkedList;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * Hello world!
- *
- */
 public class App {
+    public static List<String[][]> uniqueSolutions(List<String[][]> solutions) {
+        List<String[][]> seenSolutions = new ArrayList() {
+            @Override
+            public boolean contains(Object o) {
+                if (o == null) {
+                    return super.contains(null);
+                }
+                for(Object obj : this) {
+                    String[][] a = (String[][]) obj;
+                    String[][] b = (String[][]) o;
+                    if(Arrays.deepEquals(a, b)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+
+        List<String[][]> uniqueSolutions = new ArrayList<>();
+        for(String[][] solution : solutions) {
+            if(!seenSolutions.contains(solution)) {
+                generateAllVariants(solution).forEach(seenSolutions::add);
+                uniqueSolutions.add(solution);
+            }
+        }
+        return uniqueSolutions;
+    }
+
+    public static List<String[][]> generateAllVariants(String[][] solution) {
+        char[][] s = new char[solution.length][solution[0].length];
+        for(int i = 0; i < s.length; i++) {
+            for(int j = 0; j < solution[0].length; j++) {
+                s[i][j] = solution[i][j].toCharArray()[0];
+            }
+        }
+
+        Enclosure enclosure = new Enclosure(s);
+
+        List<String[][]> variants = new ArrayList<>();
+        for(Enclosure e : enclosure.generateAllVariants()) {
+            EnclosureCell[][] enclosureCells = e.getTrucatedCells();
+            String[][] variant = new String[enclosureCells.length][enclosureCells[0].length];
+            for(int i = 0; i < enclosureCells.length; i++) {
+                for(int j = 0; j < enclosureCells[0].length; j++) {
+                    variant[i][j] = Character.toString(enclosureCells[i][j].value);
+                }
+            }
+            variants.add(variant);
+        }
+        return variants;
+    }
+
 
     public List<String[][]> run(String filename, boolean optional) {
         InputFileParser inputFileParser = new InputFileParser(filename);

@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+
 /**
  * Test the solutions to the puzzles at http://www.cs.virginia.edu/~robins/puzzles/.
  */
@@ -91,40 +93,7 @@ public class AppTest {
         String filename = Resources.getResource("partial_cross").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String[][]> solutions = App.run(filename, false);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println(solutions.size());
-    }
-
-    @Test
-    public void testInputFilePentominoes3x10() {
-        String filename = Resources.getResource("pentominoes3x10").getPath();
-        System.out.println(filename);
-        long startTime = System.currentTimeMillis();
-        List<String[][]> solutions = App.run(filename, false);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println(solutions.size());
-    }
-
-    @Test
-    public void testInputFilePentominoes3x20() {
-        String filename = Resources.getResource("pentominoes3x20").getPath();
-        System.out.println(filename);
-        long startTime = System.currentTimeMillis();
-        List<String[][]> solutions = App.run(filename, false);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println(solutions.size());
-    }
-
-    @Test
-    public void testInputFilePentominoes6x10() {
-        String filename = Resources.getResource("pentominoes6x10").getPath();
-        System.out.println(filename);
-        long startTime = System.currentTimeMillis();
-        List<String[][]> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, true);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -139,6 +108,7 @@ public class AppTest {
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
+        System.out.println(App.uniqueSolutions(solutions).size());
     }
 
     @Test
@@ -252,6 +222,18 @@ public class AppTest {
     }
 
     @Test
+    public void testInputFilePentominoes3x20() {
+        String filename = Resources.getResource("pentominoes3x20").getPath();
+        System.out.println(filename);
+        long startTime = System.currentTimeMillis();
+        List<String[][]> solutions = App.run(filename, false);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
+        assertEquals(2, App.uniqueSolutions(solutions).size());
+    }
+
+
+    @Test
     public void testInputFilePentominoes4x15() {
         String filename = Resources.getResource("pentominoes4x15").getPath();
         System.out.println(filename);
@@ -259,7 +241,7 @@ public class AppTest {
         List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println(solutions.size());
+        assertEquals(368, App.uniqueSolutions(solutions).size());
     }
 
     @Test
@@ -270,6 +252,18 @@ public class AppTest {
         List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println(solutions.size());
+        assertEquals(1010, App.uniqueSolutions(solutions).size());
     }
+
+    @Test
+    public void testInputFilePentominoes6x10() {
+        String filename = Resources.getResource("pentominoes6x10").getPath();
+        System.out.println(filename);
+        long startTime = System.currentTimeMillis();
+        List<String[][]> solutions = App.run(filename, false);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
+        assertEquals(2339, App.uniqueSolutions(solutions).size());
+    }
+
 }

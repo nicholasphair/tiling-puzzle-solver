@@ -205,6 +205,7 @@ public class QuadLinkedList {
         int count = 0;
         DataObject current = root;
         while((current = current.getR()) != root) {
+            columns[count] = current;
             if(count++ > total) {
                 throw new IllegalArgumentException("Cannot set optional columns");
             }

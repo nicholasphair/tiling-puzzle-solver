@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class CollectSolutionsHandler implements SolutionsHandler {
     private List<String> solutions;
+    static int i = 0;
 
     public CollectSolutionsHandler() {
         this.solutions = new ArrayList<>();
