@@ -17,7 +17,7 @@ public class AppTest {
     public void testInputFileCheckerboard() {
         String filename = Resources.getResource("checkerboard").getPath();
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -27,7 +27,7 @@ public class AppTest {
     public void testInputFileTest1() {
         String filename = Resources.getResource("test1").getPath();
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -37,7 +37,7 @@ public class AppTest {
     public void testInputFileTest2() {
         String filename = Resources.getResource("test2").getPath();
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -47,7 +47,7 @@ public class AppTest {
     public void testInputFileTrivial() {
         String filename = Resources.getResource("trivial").getPath();
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         //System.out.println(solutions.get(0));
@@ -63,7 +63,7 @@ public class AppTest {
         String filename = Resources.getResource("IQ_creator").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -78,7 +78,7 @@ public class AppTest {
         String filename = Resources.getResource("lucky13").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -92,7 +92,7 @@ public class AppTest {
         String filename = Resources.getResource("partial_cross").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -103,7 +103,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes3x10").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -114,7 +114,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes3x20").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -125,7 +125,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes6x10").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -136,7 +136,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_middle_missing").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -147,7 +147,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_corner_missing").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -158,7 +158,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_corners").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -169,7 +169,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_diagonal").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -180,7 +180,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_near_corners").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -191,7 +191,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_near_middle").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -202,7 +202,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_offset_near_corners").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -213,7 +213,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_four_missing_offset_near_middle").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -224,7 +224,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_side_missing").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -235,7 +235,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes8x8_side_offset_missing").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -246,7 +246,7 @@ public class AppTest {
         String filename = Resources.getResource("thirteen_holes").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -257,7 +257,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes4x15").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());
@@ -268,7 +268,7 @@ public class AppTest {
         String filename = Resources.getResource("pentominoes5x12").getPath();
         System.out.println(filename);
         long startTime = System.currentTimeMillis();
-        List<String> solutions = App.run(filename, false);
+        List<String[][]> solutions = App.run(filename, false);
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println(solutions.size());

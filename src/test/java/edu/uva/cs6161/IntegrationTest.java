@@ -104,7 +104,9 @@ public class IntegrationTest {
 
         EnclosureCell[][] btc = boardEnclosure.getTrucatedCells();
 
-       for(String solution : solutions) {
+        List<String[][]> allSolutions = new ArrayList<>();
+
+        for(String solution : solutions) {
            String[][] output = new String[btc.length][btc[0].length];
 
            String[] solutionRows = solution.split("\n");
@@ -113,7 +115,6 @@ public class IntegrationTest {
                //System.out.println("======");
                List<Pair> solutionRowPairs = new ArrayList<>();
                for(String columnName : solutionRow.split(" ")) {
-                   // whatabout pieces
                    int flatIndex = quadLinkedList.nameToColumnIndex(columnName);
                    if(flatIndex < pieces.size()) {
                        //Sys
@@ -125,7 +126,6 @@ public class IntegrationTest {
                        solutionRowPairs.add(p);
                        //System.out.println("x: " + p.x + " y: " + p.y + " ");
                    }
-
                }
 
                for(Pair p : solutionRowPairs) {
@@ -135,21 +135,29 @@ public class IntegrationTest {
                //System.out.println("======");
            }
 
-           System.out.println("======");
-            for(int i = 0; i < output.length; i++)  {
-                for(int j = 0; j < output[0].length; j++) {
-                    System.out.print(output[i][j] + " ");
-                }
-                System.out.println();
-            }
-           System.out.println("======");
-           System.out.println();
+           allSolutions.add(output);
+
+
+           //System.out.println("======");
+           // for(int i = 0; i < output.length; i++)  {
+           //     for(int j = 0; j < output[0].length; j++) {
+           //         System.out.print(output[i][j] + " ");
+           //     }
+           //     System.out.println();
+           // }
+           //System.out.println("======");
+           //System.out.println();
 
        }
-       //     exactCoverGenerator.
-       //     System.out.println(solution);
-       //     System.out.println();
-       // }
 
+        for(String[][] output : allSolutions) {
+            System.out.println("======");
+             for(int i = 0; i < output.length; i++)  {
+                 for(int j = 0; j < output[0].length; j++) {
+                     System.out.print(output[i][j] + " ");
+                 }
+                 System.out.println();
+             }
+        }
     }
 }
