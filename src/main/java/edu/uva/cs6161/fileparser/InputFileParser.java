@@ -84,8 +84,8 @@ public class InputFileParser {
         {
 
             for (int col = 0; col < new_parser.array_width; col++) {
-               if(piecesArray_copy[row][col] != '_' && piecesArray_copy[row][col-1] == '_')
-               {
+                if(tilesArray_copy[row][col] != '_' && (col==0 || ( col > 0 && tilesArray_copy[row][col-1] == '_')))
+                {               
 
                    //System.out.println(".............................................");
 
