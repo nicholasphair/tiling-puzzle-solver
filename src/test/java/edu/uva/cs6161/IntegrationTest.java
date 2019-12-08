@@ -88,76 +88,44 @@ public class IntegrationTest {
         dlx.search(quadLinkedList);
         List<String> solutions = collectSolutionsHandler.collect();
 
-
-        //int a = quadLinkedList.nameToColumnIndex("A");
-        int zero = quadLinkedList.nameToColumnIndex("0");
-        int zeroOnBoardIndex = zero - pieces.size();
-        Pair pair = exactCoverGenerator.indexToCoordinate(zeroOnBoardIndex);
-        //System.out.println(pair.x);
-        //System.out.println(pair.y);
-
-        int three = quadLinkedList.nameToColumnIndex("3");
-        int threeBoardIndex = three - pieces.size();
-        Pair anotherPair = exactCoverGenerator.indexToCoordinate(threeBoardIndex);
-        //System.out.println(anotherPair.x);
-        //System.out.println(anotherPair.y);
-
         EnclosureCell[][] btc = boardEnclosure.getTrucatedCells();
 
         List<String[][]> allSolutions = new ArrayList<>();
 
         for(String solution : solutions) {
-           String[][] output = new String[btc.length][btc[0].length];
+            String[][] output = new String[btc.length][btc[0].length];
 
-           String[] solutionRows = solution.split("\n");
-           for(String solutionRow: solutionRows) {
-               String name = "";
-               //System.out.println("======");
-               List<Pair> solutionRowPairs = new ArrayList<>();
-               for(String columnName : solutionRow.split(" ")) {
-                   int flatIndex = quadLinkedList.nameToColumnIndex(columnName);
-                   if(flatIndex < pieces.size()) {
-                       //Sys
-                       name = columnName;
-                       //this is a piece
-                   } else {
-                       int boardIndex = flatIndex - pieces.size();
-                       Pair p = exactCoverGenerator.indexToCoordinate(boardIndex);
-                       solutionRowPairs.add(p);
-                       //System.out.println("x: " + p.x + " y: " + p.y + " ");
-                   }
-               }
+            String[] solutionRows = solution.split("\n");
+            for(String solutionRow: solutionRows) {
+                String name = "";
+                List<Pair> solutionRowPairs = new ArrayList<>();
+                for(String columnName : solutionRow.split(" ")) {
+                    int flatIndex = quadLinkedList.nameToColumnIndex(columnName);
+                    if(flatIndex < pieces.size()) {
+                        name = columnName;
+                    } else {
+                        int boardIndex = flatIndex - pieces.size();
+                        Pair p = exactCoverGenerator.indexToCoordinate(boardIndex);
+                        solutionRowPairs.add(p);
+                    }
+                }
 
-               for(Pair p : solutionRowPairs) {
-                   output[p.x][p.y] = name;
-               }
-               //System.out.println("PIECE IS " + name);
-               //System.out.println("======");
-           }
+                for(Pair p : solutionRowPairs) {
+                    output[p.x][p.y] = name;
+                }
+            }
 
-           allSolutions.add(output);
-
-
-           //System.out.println("======");
-           // for(int i = 0; i < output.length; i++)  {
-           //     for(int j = 0; j < output[0].length; j++) {
-           //         System.out.print(output[i][j] + " ");
-           //     }
-           //     System.out.println();
-           // }
-           //System.out.println("======");
-           //System.out.println();
-
-       }
-
-        for(String[][] output : allSolutions) {
-            System.out.println("======");
-             for(int i = 0; i < output.length; i++)  {
-                 for(int j = 0; j < output[0].length; j++) {
-                     System.out.print(output[i][j] + " ");
-                 }
-                 System.out.println();
-             }
+            allSolutions.add(output);
         }
+
+        //for(String[][] output : allSolutions) {
+        //    System.out.println("======");
+        //     for(int i = 0; i < output.length; i++)  {
+        //         for(int j = 0; j < output[0].length; j++) {
+        //             System.out.print(output[i][j] + " ");
+        //         }
+        //         System.out.println();
+        //     }
+        //}
     }
 }
