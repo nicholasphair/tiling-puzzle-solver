@@ -70,7 +70,7 @@
             <manifest>
                 <addClasspath>true</addClasspath>
                 <!-- <classpathPrefix></classpathPrefix> -->
-                <mainClass>edu.uva.cs6161.App</mainClass>
+                <mainClass>edu.uva.cs6161.TilingPuzzleSolver</mainClass>
             </manifest>
         </archive>
     </configuration>
