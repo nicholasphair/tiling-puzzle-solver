@@ -24,6 +24,22 @@ public class InputFileParserTest {
     }
 
     @Test
+    public void getInputTilesLucky13() {
+        String filename = Resources.getResource("lucky13").getPath();
+        InputFileParser inputFileParser = new InputFileParser(filename);
+
+        assertEquals(14, inputFileParser.getInputPieces().size());
+    }
+
+    @Test
+    public void getInputTilesLuckyIQ_creator() {
+        String filename = Resources.getResource("IQ_creator").getPath();
+        InputFileParser inputFileParser = new InputFileParser(filename);
+
+        assertEquals(9, inputFileParser.getInputPieces().size());
+    }
+
+    @Test
     public void identifyLargest() {
         char[][] small = {{'X', 'O'}};
 
