@@ -28,6 +28,16 @@ public class InputFileParserTest {
         String filename = Resources.getResource("lucky13").getPath();
         InputFileParser inputFileParser = new InputFileParser(filename);
 
+        for(char[][] a : inputFileParser.getInputPieces()) {
+            for(char[] r : a) {
+                for(char c : r) {
+                    System.out.print(c + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            System.out.println();
+        }
         assertEquals(14, inputFileParser.getInputPieces().size());
     }
 

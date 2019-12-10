@@ -2,14 +2,10 @@ package edu.uva.cs6161;
 
 import edu.uva.cs6161.fileparser.InputFileParser;
 import edu.uva.cs6161.handlers.CollectSolutionsHandler;
-import edu.uva.cs6161.structures.Enclosure;
-import edu.uva.cs6161.structures.EnclosureCell;
-import edu.uva.cs6161.structures.Pair;
-import edu.uva.cs6161.structures.QuadLinkedList;
+import edu.uva.cs6161.structures.*;
+import edu.uva.cs6161.utils.PuzzleUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class App {
@@ -86,9 +82,11 @@ public class App {
 
         CollectSolutionsHandler collector = new CollectSolutionsHandler();
         QuadLinkedList quadLinkedList = new QuadLinkedList(matrix);
+        PuzzleUtils puzzleUtils = new PuzzleUtils(quadLinkedList, exactCoverGenerator);
+
+
         if(optional) {
-            //quadLinkedList.setOptionalColumns(matrix[0].length - pieces.size(), pieces.size());
-            quadLinkedList.setOptionalColumns(pieces.size(), matrix[0].length - pieces.size());
+            quadLinkedList.makeFirstNColumnsSecondary(pieces.size());
         }
 
         DLX dlx = new DLX(true, collector);
@@ -98,6 +96,8 @@ public class App {
         EnclosureCell[][] btc = board.getTrucatedCells();
         List<String[][]> allSolutions = new ArrayList<>();
 
+
+        System.out.println(solutions.size());
         for(String solution : solutions) {
             String[][] output = new String[btc.length][btc[0].length];
             deepFill(output, "_");
@@ -107,7 +107,7 @@ public class App {
                 String name = "";
                 List<Pair> solutionRowPairs = new ArrayList<>();
                 for(String columnName : solutionRow.split(" ")) {
-                    int flatIndex = quadLinkedList.nameToColumnIndex(columnName);
+                    int flatIndex = puzzleUtils.nameToColumnIndex(columnName);
                     if(flatIndex < pieces.size()) {
                         name = columnName;
                     } else {

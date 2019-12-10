@@ -39,7 +39,11 @@ public class DLX {
      * @param matrix
      */
     public void search(QuadLinkedList matrix) {
+        long startTime = System.currentTimeMillis();
+        System.out.println("Start Time: " + startTime);
         search(matrix, 0, new ArrayList<>());
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
     }
 
     /**

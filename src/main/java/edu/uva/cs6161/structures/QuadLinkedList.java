@@ -194,31 +194,38 @@ public class QuadLinkedList {
     }
 
 
-    public void setOptionalColumns(int optional, int mandatory) {
-        if(mandatory < 0 || optional < 1 || root == null) {
-            throw new IllegalArgumentException("Cannot set optional columns");
+    public void makeFirstNColumnsSecondary(int n) {
+        if (n < 1 || root == null) {
+            return;
         }
 
-        int total = mandatory + optional;
-        DataObject columns[] = new DataObject[total];
-
-        int count = 0;
-        DataObject current = root;
-        while((current = current.getR()) != root) {
-            columns[count] = current;
-            if(count++ > total) {
-                throw new IllegalArgumentException("Cannot set optional columns");
-            }
+        DataObject man = getColumnAtIndex(n+1);
+        ColumnObject current = root;
+        while((current = (ColumnObject) current.getR()) != root) {
+            makeSecondary(current);
+            if(--n == 0) break;
         }
 
-        if (mandatory > 0) {
-            columns[mandatory - 1].setL(root);
-            root.setR(columns[mandatory - 1]);
+        if(n != 0) {
+            throw new IllegalArgumentException("Could not make the first n columns optional.");
         }
 
-        for (int i = 0; i < mandatory; i++) {
-            columns[i].setL(columns[i]);
-            columns[i].setR(columns[i]);
+        man.setL(root);
+        root.setR(man);
+    }
+
+
+    private DataObject getColumnAtIndex(int i) {
+        ColumnObject current = root;
+        while((current = (ColumnObject) current.getR()) != root) {
+            if(--i == 0) return current;
         }
+
+        throw new IllegalArgumentException("There is no nth column to get.");
+    }
+
+    private static void makeSecondary(DataObject object) {
+        object.setL(object);
+        object.setR(object);
     }
 }
