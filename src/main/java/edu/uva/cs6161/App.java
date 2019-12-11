@@ -97,7 +97,6 @@ public class App {
         List<String[][]> allSolutions = new ArrayList<>();
 
 
-        System.out.println(solutions.size());
         for(String solution : solutions) {
             String[][] output = new String[btc.length][btc[0].length];
             deepFill(output, "_");

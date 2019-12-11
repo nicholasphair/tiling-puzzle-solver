@@ -80,7 +80,7 @@ public class AppTest {
         System.out.println("Number of unique solutions: " + App.uniqueSolutions(solutions).size());
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void testInputFileLucky13() {
         String filename = Resources.getResource("lucky13").getPath();
@@ -92,7 +92,7 @@ public class AppTest {
         System.out.println(filename);
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
         System.out.println("Number of solutions: " + solutions.size());
-        //System.out.println("Number of unique solutions: " + App.uniqueSolutions(solutions).size());
+        System.out.println("Number of unique solutions: " + App.uniqueSolutions(solutions).size());
     }
 
     @Test
