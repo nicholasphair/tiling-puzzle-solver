@@ -21,10 +21,10 @@ See the [demo folder](/demo/) for screenshots of other puzzles.
 # building
 You can build the project with maven:
 ```bash
-mvn clean install
+mvn clean install -DskipTests
 ```
 
 # running
 ```bash
-java -jar target/tiling-puzzle-solver-0.0.1-SNAPSHOT.jar
+java -jar target/tiling-puzzle-solver-0.0.1-SNAPSHOT.jar 
 ```
