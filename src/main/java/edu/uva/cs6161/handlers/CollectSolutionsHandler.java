@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class CollectSolutionsHandler implements SolutionsHandler {
     private List<String> solutions;
-    static int i = 0;
 
     public CollectSolutionsHandler() {
         this.solutions = new ArrayList<>();
@@ -27,9 +26,6 @@ public class CollectSolutionsHandler implements SolutionsHandler {
 
     @Override
     public void handle(List<DataObject> solutions) {
-        if(i++ == 0) {
-            System.out.println("First Solution Time: " + System.currentTimeMillis());
-        }
         StringBuilder builder = new StringBuilder();
         for(DataObject o : solutions) {
             DataObject x = o;
